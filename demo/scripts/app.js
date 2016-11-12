@@ -39,9 +39,6 @@ demoApp.config(function ($mdThemingProvider) {
     });
 });
 
-// needed ?
-demoApp.run(['$state', 'test', function ($state,test) {
+demoApp.run(function ($state) {
   $state.go('home');
-  console.log ('angular has been boostrapped');
-  test.test();
-}]);
+});

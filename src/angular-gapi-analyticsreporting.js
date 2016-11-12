@@ -9,16 +9,4 @@
  * Main module of the plugin.
  */
 
-var plugin = angular.module('angularGapiAnalyticsreporting',
-  [
-  ]
-);
-
-plugin.factory('test', function () {
-
-  return {
-    test: function(){
-      console.log('service is injected');
-    }
-  };
-});
+var plugin = angular.module('angularGapiAnalyticsreporting',[]);

@@ -8,7 +8,14 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope) {
+  .controller('MainCtrl', function ($scope, ngarLoadService) {
+
+    $scope.loadStatus = ngarLoadService.status;
+
+    $scope.load = function(){
+      ngarLoadService.loadAll();
+    };
+
     $scope.signin = function(){
       console.log('signing in');
     };

@@ -1,13 +1,30 @@
 <md-content layout-margin>
 
   <h2>
+    Loading Google API
+  </h2>
+  <div layout="row">
+    <md-button class="md-raised md-primary md-hue-2" ng-click="load()">
+      Load
+    </md-button>
+    <div >
+      Google API
+      <md-icon ng-if="loadStatus.gapiLoaded" style="color:green;">check_circle</md-icon>
+      <md-icon ng-if="!loadStatus.gapiLoaded" style="color:red;">not_interested</md-icon>
+    </div>
+    <div>
+      Auth2 API
+      <md-icon ng-if="loadStatus.auth2Loaded" style="color:green;">check_circle</md-icon>
+      <md-icon ng-if="!loadStatus.auth2Loaded" style="color:red;">not_interested</md-icon>
+    </div>
+  </div>
+
+  <h2>
     Authenticate
   </h2>
-
   <md-button class="md-raised md-primary md-hue-2" ng-click="signin()">
     Sign-In
   </md-button>
-
   <md-button class="md-raised md-primary md-hue-2" ng-click="signout()">
     Sign-Out
   </md-button>
@@ -15,7 +32,6 @@
   <h2>
     Get Accounts
   </h2>
-
   <md-button class="md-raised md-primary md-hue-2" ng-click="getAccounts()">
     Get Account
   </md-button>
@@ -23,7 +39,6 @@
   <h2>
     Get API metadata
   </h2>
-
   <md-button class="md-raised md-primary md-hue-2" ng-click="getMetadata()">
     Get Metadata
   </md-button>
