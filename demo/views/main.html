@@ -3,9 +3,8 @@
   <h2>
     Loading Google API
   </h2>
-  <div layout="row">
     <md-button class="md-raised md-primary md-hue-2" ng-click="load()">
-      Load
+      Load APIs
     </md-button>
     <div >
       Google API
@@ -17,29 +16,16 @@
       <md-icon ng-if="loadStatus.auth2Loaded" style="color:green;">check_circle</md-icon>
       <md-icon ng-if="!loadStatus.auth2Loaded" style="color:red;">not_interested</md-icon>
     </div>
-  </div>
-
-  <div layout="row">
-    <md-button class="md-raised md-primary md-hue-2" ng-click="loadGarV3()">
-      Load GA V3
-    </md-button>
     <div >
       Google Analytics Reporting V3
       <md-icon ng-if="loadStatus.analyticsV3Loaded" style="color:green;">check_circle</md-icon>
       <md-icon ng-if="!loadStatus.analyticsV3Loaded" style="color:red;">not_interested</md-icon>
     </div>
-  </div>
-
-  <div layout="row">
-    <md-button class="md-raised md-primary md-hue-2" ng-click="loadGarV4()">
-      Load GA V4
-    </md-button>
     <div >
       Google Analytics Reporting V4
       <md-icon ng-if="loadStatus.analyticsV4Loaded" style="color:green;">check_circle</md-icon>
       <md-icon ng-if="!loadStatus.analyticsV4Loaded" style="color:red;">not_interested</md-icon>
     </div>
-  </div>
 
   <h2>
     Authenticate

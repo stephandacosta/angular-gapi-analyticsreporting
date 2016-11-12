@@ -27,12 +27,13 @@ angular.module('angularGapiAnalyticsreporting')
   // load Google Analytcs API and return promise that will resolve to gapi handle
   var loadGapi = function(){
     //code from http://www.ng-newsletter.com/posts/d3-on-angular.html
-    var d = $q.defer();
+    var deferred = $q.defer();
     var onScriptLoad = function() {
       // Load client in the browser
-      $rootScope.$apply(function() { d.resolve(window.gapi); });
-      console.log('gapi loaded');
-      status.gapiLoaded = true;
+      $rootScope.$apply(function() {
+        console.log('gapi loaded');
+        status.gapiLoaded = true;
+        deferred.resolve(window.gapi); });
     };
     // Create a script tag with gapi as the source
     // and initialize authentification when it
@@ -51,42 +52,57 @@ angular.module('angularGapiAnalyticsreporting')
     var s = $document[0].getElementsByTagName('body')[0];
     s.appendChild(scriptTag);
 
-    return d.promise;
+    return deferred.promise;
 
   };
 
 
   // load auth api and possible callback when ready
-  var loadAuth2 = function(gapiHandle, callback){
-    gapiHandle.load('client:auth2', function(){
-      console.log('auth loaded');
-      status.auth2Loaded = true;
-      if (typeof callback === 'function'){
-        callback();
-      }
-    });
+  var loadAuth2 = function(){
+    var deferred = $q.defer();
+    if (status.gapiLoaded){
+      window.gapi.load('client:auth2', function(){
+        console.log('auth loaded');
+        status.auth2Loaded = true;
+        deferred.resolve();
+      });
+    } else {
+      console.log('google api not loaded');
+      deferred.reject('google api not loaded');
+    }
+    return deferred.promise;
   };
 
   // Function to trigger loading of all accessible accounts, segments and GA metadata
   // we load V3 to access management API (for accounts and segments information)
-  var loadGarV3 = function(callback){
-    window.gapi.client.load(_AnalyticsV3).then(function() {
-      console.log('v3 is loaded');
-      status.analyticsV3Loaded = true;
-      if (typeof callback === 'function'){
-        callback();
-      }
-    });
+  var loadGarV3 = function(){
+    var deferred = $q.defer();
+    if (status.gapiLoaded){
+      window.gapi.client.load(_AnalyticsV3).then(function() {
+        console.log('v3 is loaded');
+        status.analyticsV3Loaded = true;
+        deferred.resolve();
+      });
+    } else {
+      console.log('google api not loaded');
+      deferred.reject('google api not loaded');
+    }
+    return deferred.promise;
   };
 
-  var loadGarV4 = function(callback){
-    window.gapi.client.load(_AnalyticsV4).then(function() {
-      console.log('v4 is loaded');
-      status.analyticsV4Loaded = true;
-      if (typeof callback === 'function'){
-        callback();
-      }
-    });
+  var loadGarV4 = function(){
+    var deferred = $q.defer();
+    if (status.gapiLoaded){
+      window.gapi.client.load(_AnalyticsV4).then(function() {
+        console.log('v4 is loaded');
+        status.analyticsV4Loaded = true;
+        deferred.resolve();
+      });
+    } else {
+      console.log('google api not loaded');
+      deferred.reject('google api not loaded');
+    }
+    return deferred.promise;
   };
 
 
@@ -95,18 +111,15 @@ angular.module('angularGapiAnalyticsreporting')
   return {
     loadGapi: loadGapi,
     loadAuth2: loadAuth2,
-    loadAll: function(onReadyCallback){
-      console.log('loading');
-      loadGapi().then(function(gapi){
-        if (typeof onReadyCallback === 'function'){
-          loadAuth2(gapi,onReadyCallback);
-        } else {
-          loadAuth2(gapi);
-        }
-      });
-    },
     loadGarV3: loadGarV3,
     loadGarV4: loadGarV4,
+    loadAllApis: function(){
+      console.log('loading all APIs');
+      return loadGapi()
+        .then(loadAuth2)
+        .then(loadGarV3)
+        .then(loadGarV4);
+    },
     status:status
   };
 
