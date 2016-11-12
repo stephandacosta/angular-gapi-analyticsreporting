@@ -8,7 +8,7 @@
  * Factory in angular-gapi-reporting for authentifications
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarAuthService', function () {
+  .factory('ngarAuthService', function ($rootScope) {
 
 
 
@@ -26,17 +26,18 @@ angular.module('angularGapiAnalyticsreporting')
   // the status object
   var status = {
     authInitialized: false,
-    signedIn: false
+    signedIn: false,
+    user: 'signed out'
   };
 
 
   // Function to initialize authentfication
   // assumes gapi object is loaded and available in the global namespace
-  var initAuth = function(callback) {
-    window.gapi.auth2.init({
+  var initAuth = function() {
+    return window.gapi.auth2.init({
         client_id: CLIENT_ID,
         scope: SCOPES
-    }).then(function () {
+    }).then(function (response) {
       auth2 = window.gapi.auth2.getAuthInstance();
       status.authInitialized = true;
       // update signed in status
@@ -44,8 +45,10 @@ angular.module('angularGapiAnalyticsreporting')
       // then listen for change
       auth2.isSignedIn.listen(updateSigninStatus);
       // auth2.currentUser.listen(listener);
-      // finally callback
-      callback();
+      return response;
+    }, function(error){
+      console.log('error loading initializing auth', error);
+      return error;
     });
   };
 
@@ -65,29 +68,17 @@ angular.module('angularGapiAnalyticsreporting')
     console.log('update in signin status');
     status.signedIn = isSignedIn;
     updateUser();
+    $rootScope.$digest();
   };
 
-  // function to trigger sign-in by the user
-  // ** better return the promise itself
-  var signIn = function(callback) {
-    if (status.authInitialized){
-      console.log('logging in');
-      auth2.signIn().then(callback);
-    } else {
-      console.log('error auth not initialized');
-    }
+  // function to trigger sign-in by the user returns promise
+  var signIn = function() {
+    return auth2.signIn();
   };
 
-  // function to trigger sign-out by the user
-  // ** better return the promise itself
-  // ** put condition that
-  var signOut = function(callback) {
-    if (status.authInitialized){
-      console.log('logging out');
-      auth2.signOut().then(callback);
-    } else {
-      console.log('error auth not initialized');
-    }
+  // function to trigger sign-out by the user returns promise
+  var signOut = function() {
+    return auth2.signOut();
   };
 
 

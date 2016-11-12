@@ -14,34 +14,37 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     $scope.authStatus = ngarAuthService.status;
 
     $scope.load = function(){
-      ngarLoadService.loadAll();
-    };
-
-    $scope.loadGarV3 = function(){
-      ngarLoadService.loadGarV3();
-    };
-
-    $scope.loadGarV4 = function(){
-      ngarLoadService.loadGarV4();
+      ngarLoadService.loadAllApis().then(function(){
+        console.log('all apis are loaded');
+      });
     };
 
     $scope.initAuth = function(){
       console.log('initializing Auth');
-      ngarAuthService.initAuth(function(){
-        console.log('auth is initialized');
+      ngarAuthService.initAuth().then(function(){
+        console.log('Auth is initialized');
+        $scope.$digest();
+      }, function(error){
+        console.log('errror initilizing Auth', error);
       });
     };
 
     $scope.signIn = function(){
       console.log('signing in');
-      ngarAuthService.signIn(function(){
+      ngarAuthService.signIn().then(function(){
         console.log('signed in');
+        $scope.$digest();
+      }, function(error){
+        console.log('errror initilizing signing in', error);
       });
     };
     $scope.signOut = function(){
       console.log('signing out');
-      ngarAuthService.signOut(function(){
+      ngarAuthService.signOut().then(function(){
         console.log('signed out');
+        $scope.$digest();
+      }, function(error){
+        console.log('errror initilizing signing out', error);
       });
     };
 
