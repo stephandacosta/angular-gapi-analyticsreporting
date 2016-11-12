@@ -33,7 +33,16 @@ angular.module('angularGapiAnalyticsreporting')
       $rootScope.$apply(function() {
         console.log('gapi loaded');
         status.gapiLoaded = true;
-        deferred.resolve(window.gapi); });
+        deferred.resolve(window.gapi);
+      });
+    };
+    var onScriptError = function(error) {
+      // Load client in the browser
+      $rootScope.$apply(function() {
+        console.log('gapi loading error');
+        status.gapiLoaded = false;
+        deferred.reject(error);
+      });
     };
     // Create a script tag with gapi as the source
     // and initialize authentification when it
@@ -45,9 +54,12 @@ angular.module('angularGapiAnalyticsreporting')
     scriptTag.onreadystatechange = function () {
       if (this.readyState === 'complete') {
         onScriptLoad();
+      } else {
+        onScriptError(this.readyState);
       }
     };
     scriptTag.onload = onScriptLoad;
+    scriptTag.onerror = onScriptError;
 
     var s = $document[0].getElementsByTagName('body')[0];
     s.appendChild(scriptTag);
@@ -61,10 +73,10 @@ angular.module('angularGapiAnalyticsreporting')
   var loadAuth2 = function(){
     var deferred = $q.defer();
     if (status.gapiLoaded){
-      window.gapi.load('client:auth2', function(){
+      window.gapi.load('client:auth2', function(response){
         console.log('auth loaded');
         status.auth2Loaded = true;
-        deferred.resolve();
+        deferred.resolve(response);
       });
     } else {
       console.log('google api not loaded');
@@ -78,10 +90,10 @@ angular.module('angularGapiAnalyticsreporting')
   var loadGarV3 = function(){
     var deferred = $q.defer();
     if (status.gapiLoaded){
-      window.gapi.client.load(_AnalyticsV3).then(function() {
+      window.gapi.client.load(_AnalyticsV3).then(function(response) {
         console.log('v3 is loaded');
         status.analyticsV3Loaded = true;
-        deferred.resolve();
+        deferred.resolve(response);
       });
     } else {
       console.log('google api not loaded');
@@ -93,10 +105,10 @@ angular.module('angularGapiAnalyticsreporting')
   var loadGarV4 = function(){
     var deferred = $q.defer();
     if (status.gapiLoaded){
-      window.gapi.client.load(_AnalyticsV4).then(function() {
+      window.gapi.client.load(_AnalyticsV4).then(function(response) {
         console.log('v4 is loaded');
         status.analyticsV4Loaded = true;
-        deferred.resolve();
+        deferred.resolve(response);
       });
     } else {
       console.log('google api not loaded');
