@@ -22,7 +22,8 @@
     ".sass-cache"
   ],
   "dependencies": {
-    "angular": "^1.4.0"
+    "angular": "^1.4.0",
+    "lodash": "^4.16.6"
   },
   "devDependencies": {
     "angular-material": "^1.1.1",
