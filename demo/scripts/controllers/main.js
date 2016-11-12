@@ -17,6 +17,14 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       ngarLoadService.loadAll();
     };
 
+    $scope.loadGarV3 = function(){
+      ngarLoadService.loadGarV3();
+    };
+
+    $scope.loadGarV4 = function(){
+      ngarLoadService.loadGarV4();
+    };
+
     $scope.initAuth = function(){
       console.log('initializing Auth');
       ngarAuthService.initAuth(function(){

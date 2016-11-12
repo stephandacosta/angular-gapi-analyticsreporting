@@ -13,7 +13,15 @@ angular.module('angularGapiAnalyticsreporting')
     var status = {
       gapiLoaded: false,
       auth2Loaded:false,
+      analyticsV3Loaded: false,
+      analyticsV4Loaded: false
     };
+
+    //Analytics API endpoints
+    var _Gapi = 'https://apis.google.com/js/api.js';
+    var _AnalyticsV4 = 'https://analyticsreporting.googleapis.com/$discovery/rest';
+    var _AnalyticsV3 = 'https://www.googleapis.com/discovery/v1/apis/analytics/v3/rest';
+    // var _Auth = "https://www.googleapis.com/discovery/v1/apis/oauth2/v2/rest";
 
 
   // load Google Analytcs API and return promise that will resolve to gapi handle
@@ -25,17 +33,19 @@ angular.module('angularGapiAnalyticsreporting')
       $rootScope.$apply(function() { d.resolve(window.gapi); });
       console.log('gapi loaded');
       status.gapiLoaded = true;
-    }
+    };
     // Create a script tag with gapi as the source
     // and initialize authentification when it
     // has been loaded
     var scriptTag = $document[0].createElement('script');
     scriptTag.type = 'text/javascript';
     scriptTag.async = true;
-    scriptTag.src = 'https://apis.google.com/js/api.js';
+    scriptTag.src = _Gapi;
     scriptTag.onreadystatechange = function () {
-      if (this.readyState == 'complete') onScriptLoad();
-    }
+      if (this.readyState === 'complete') {
+        onScriptLoad();
+      }
+    };
     scriptTag.onload = onScriptLoad;
 
     var s = $document[0].getElementsByTagName('body')[0];
@@ -47,11 +57,34 @@ angular.module('angularGapiAnalyticsreporting')
 
 
   // load auth api and possible callback when ready
-  var loadAuth2 = function(gapiHandle, onReadyCallback){
+  var loadAuth2 = function(gapiHandle, callback){
     gapiHandle.load('client:auth2', function(){
+      console.log('auth loaded');
       status.auth2Loaded = true;
-      if (typeof onReadyCallback === 'function'){
-        onReadyCallback();
+      if (typeof callback === 'function'){
+        callback();
+      }
+    });
+  };
+
+  // Function to trigger loading of all accessible accounts, segments and GA metadata
+  // we load V3 to access management API (for accounts and segments information)
+  var loadGarV3 = function(callback){
+    window.gapi.client.load(_AnalyticsV3).then(function() {
+      console.log('v3 is loaded');
+      status.analyticsV3Loaded = true;
+      if (typeof callback === 'function'){
+        callback();
+      }
+    });
+  };
+
+  var loadGarV4 = function(callback){
+    window.gapi.client.load(_AnalyticsV4).then(function() {
+      console.log('v4 is loaded');
+      status.analyticsV4Loaded = true;
+      if (typeof callback === 'function'){
+        callback();
       }
     });
   };
@@ -72,6 +105,8 @@ angular.module('angularGapiAnalyticsreporting')
         }
       });
     },
+    loadGarV3: loadGarV3,
+    loadGarV4: loadGarV4,
     status:status
   };
 

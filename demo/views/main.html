@@ -19,6 +19,28 @@
     </div>
   </div>
 
+  <div layout="row">
+    <md-button class="md-raised md-primary md-hue-2" ng-click="loadGarV3()">
+      Load GA V3
+    </md-button>
+    <div >
+      Google Analytics Reporting V3
+      <md-icon ng-if="loadStatus.analyticsV3Loaded" style="color:green;">check_circle</md-icon>
+      <md-icon ng-if="!loadStatus.analyticsV3Loaded" style="color:red;">not_interested</md-icon>
+    </div>
+  </div>
+
+  <div layout="row">
+    <md-button class="md-raised md-primary md-hue-2" ng-click="loadGarV4()">
+      Load GA V4
+    </md-button>
+    <div >
+      Google Analytics Reporting V4
+      <md-icon ng-if="loadStatus.analyticsV4Loaded" style="color:green;">check_circle</md-icon>
+      <md-icon ng-if="!loadStatus.analyticsV4Loaded" style="color:red;">not_interested</md-icon>
+    </div>
+  </div>
+
   <h2>
     Authenticate
   </h2>
@@ -42,6 +64,7 @@
     <md-icon ng-if="!authStatus.signedIn" style="color:red;">not_interested</md-icon>
     Google Account: <span ng-bind="authStatus.user"></span>
   </div>
+
 
   <h2>
     Get Accounts
