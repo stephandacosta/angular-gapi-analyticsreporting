@@ -18,10 +18,11 @@ angular.module('angularGapiAnalyticsreporting')
     };
 
     //Analytics API endpoints
+    // discovery list: https://developers.google.com/apis-explorer/#p/discovery/v1/discovery.apis.list
+    // api explorer: https://developers.google.com/apis-explorer
     var _Gapi = 'https://apis.google.com/js/api.js';
     var _AnalyticsV4 = 'https://analyticsreporting.googleapis.com/$discovery/rest';
     var _AnalyticsV3 = 'https://www.googleapis.com/discovery/v1/apis/analytics/v3/rest';
-    // var _Auth = "https://www.googleapis.com/discovery/v1/apis/oauth2/v2/rest";
 
 
   // load Google Analytcs API and return promise that will resolve to gapi handle
@@ -77,6 +78,9 @@ angular.module('angularGapiAnalyticsreporting')
         console.log('auth loaded');
         status.auth2Loaded = true;
         deferred.resolve(response);
+      }, function(error){
+        console.log('auth not loaded');
+        deferred.reject(error);
       });
     } else {
       console.log('google api not loaded');
@@ -94,6 +98,9 @@ angular.module('angularGapiAnalyticsreporting')
         console.log('v3 is loaded');
         status.analyticsV3Loaded = true;
         deferred.resolve(response);
+      }, function(error){
+        console.log('analytics API v3 not loaded');
+        deferred.reject(error);
       });
     } else {
       console.log('google api not loaded');
@@ -109,6 +116,9 @@ angular.module('angularGapiAnalyticsreporting')
         console.log('v4 is loaded');
         status.analyticsV4Loaded = true;
         deferred.resolve(response);
+      }, function(error){
+        console.log('analytics API v4 not loaded');
+        deferred.reject(error);
       });
     } else {
       console.log('google api not loaded');
