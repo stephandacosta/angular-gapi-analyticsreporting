@@ -22,12 +22,26 @@
   <h2>
     Authenticate
   </h2>
-  <md-button class="md-raised md-primary md-hue-2" ng-click="signin()">
+  <md-button class="md-raised md-primary md-hue-2" ng-click="initAuth()">
+    Initiate Auth
+  </md-button>
+  <div >
+    Auth Initilization
+    <md-icon ng-if="authStatus.authInitialized" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!authStatus.authInitialized" style="color:red;">not_interested</md-icon>
+  </div>
+  <md-button class="md-raised md-primary md-hue-2" ng-click="signIn()">
     Sign-In
   </md-button>
-  <md-button class="md-raised md-primary md-hue-2" ng-click="signout()">
+  <md-button class="md-raised md-primary md-hue-2" ng-click="signOut()">
     Sign-Out
   </md-button>
+  <div >
+    Signed In
+    <md-icon ng-if="authStatus.signedIn" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!authStatus.signedIn" style="color:red;">not_interested</md-icon>
+    Google Account: <span ng-bind="authStatus.user"></span>
+  </div>
 
   <h2>
     Get Accounts

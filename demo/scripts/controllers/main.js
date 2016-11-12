@@ -8,20 +8,35 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, ngarLoadService) {
+  .controller('MainCtrl', function ($scope, ngarLoadService, ngarAuthService) {
 
     $scope.loadStatus = ngarLoadService.status;
+    $scope.authStatus = ngarAuthService.status;
 
     $scope.load = function(){
       ngarLoadService.loadAll();
     };
 
-    $scope.signin = function(){
+    $scope.initAuth = function(){
+      console.log('initializing Auth');
+      ngarAuthService.initAuth(function(){
+        console.log('auth is initialized');
+      });
+    };
+
+    $scope.signIn = function(){
       console.log('signing in');
+      ngarAuthService.signIn(function(){
+        console.log('signed in');
+      });
     };
-    $scope.signout = function(){
+    $scope.signOut = function(){
       console.log('signing out');
+      ngarAuthService.signOut(function(){
+        console.log('signed out');
+      });
     };
+
     $scope.getAccounts = function(){
       console.log('getting accounts');
     };
