@@ -132,7 +132,8 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.demo %>/scripts/{,*/}*.js'
+          '<%= yeoman.demo %>/scripts/{,*/}*.js',
+          '<%= yeoman.plugin %>/{,*/}*.js'
         ]
       },
       test: {
@@ -152,7 +153,8 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.demo %>/scripts/{,*/}*.js'
+          '<%= yeoman.demo %>/scripts/{,*/}*.js',
+          '<%= yeoman.plugin %>/{,*/}*.js'
         ]
       },
       test: {
