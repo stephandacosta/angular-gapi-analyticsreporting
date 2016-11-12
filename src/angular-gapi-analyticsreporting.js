@@ -10,3 +10,8 @@
  */
 
 var plugin = angular.module('angularGapiAnalyticsreporting',[]);
+
+// reminder to add error logging to analytics itself
+plugin.run(function(){
+  console.log('ngar is running');
+});
