@@ -11,7 +11,8 @@
 var demoApp = angular.module('angularGapiAnalyticsreportingDemoApp',
   [
     'ngMaterial',
-    'ui.router'
+    'ui.router',
+    'angularGapiAnalyticsreporting'
   ]
 );
 
@@ -39,7 +40,8 @@ demoApp.config(function ($mdThemingProvider) {
 });
 
 // needed ?
-demoApp.run(['$state', function ($state) {
+demoApp.run(['$state', 'test', function ($state,test) {
   $state.go('home');
   console.log ('angular has been boostrapped');
+  test.test();
 }]);
