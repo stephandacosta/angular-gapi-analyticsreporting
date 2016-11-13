@@ -22,6 +22,7 @@ module.exports = function(config) {
       // bower:js
       'bower_components/angular/angular.js',
       'bower_components/lodash/lodash.js',
+      'bower_components/moment/moment.js',
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-messages/angular-messages.js',
