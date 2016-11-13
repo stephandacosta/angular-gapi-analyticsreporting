@@ -62,25 +62,25 @@
     Accounts, Properties, Views
     <md-icon ng-if="managementStatus.accountsTreeLoaded" style="color:green;">check_circle</md-icon>
     <md-icon ng-if="!managementStatus.accountsTreeLoaded" style="color:red;">not_interested</md-icon>
-    <textarea cols="80" rows="20">
-      {{managementItems.accountsTree | json}}
-    </textarea>
+    <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgAccountTree')">
+      Show Tree
+    </md-button>
   </div>
   <div >
     Segments
     <md-icon ng-if="managementStatus.segmentsLoaded" style="color:green;">check_circle</md-icon>
     <md-icon ng-if="!managementStatus.segmentsLoaded" style="color:red;">not_interested</md-icon>
-    <textarea cols="80" rows="20">
-      {{managementItems.segments | json}}
-    </textarea>
+    <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgSegments')">
+      Show Segments
+    </md-button>
   </div>
   <div >
     MetaData
     <md-icon ng-if="managementStatus.metadataLoaded" style="color:green;">check_circle</md-icon>
     <md-icon ng-if="!managementStatus.metadataLoaded" style="color:red;">not_interested</md-icon>
-    <textarea cols="80" rows="20">
-      {{managementItems.metadata | json}}
-    </textarea>
+    <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgMetadata')">
+      Show Metadata
+    </md-button>
   </div>
 
 

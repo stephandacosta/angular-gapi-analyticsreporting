@@ -8,7 +8,7 @@
  * Factory in angular-gapi-reporting to load management API ressources
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarManagementService', function ($rootScope,$q) {
+  .factory('ngarManagementService', function () {
 
     var status = {
       accountsTreeLoaded: false,
@@ -22,7 +22,15 @@ angular.module('angularGapiAnalyticsreporting')
       metadata : []
     };
 
+    var viewId;
 
+    // generic error handler
+    var handleError = function(logmsg){
+      return function(error){
+        console.log(logmsg);
+        return error;
+      };
+    };
 
     // get all accessible accounts then parse in a tree (json)
     // [
@@ -43,57 +51,54 @@ angular.module('angularGapiAnalyticsreporting')
     //     ]
     //   }
     // ]
-    var queryAccounts = function() {
-      var deferred = $q.defer();
-      window.gapi.client.analytics.management.accountSummaries.list()
-        .then(function(accountSummariesResponse) {
-          items.accountsTree = accountSummariesResponse.result.items.map(function(account){
-            var accountObj = {};
-            accountObj.name = account.name;
-            accountObj.id = account.id;
-            accountObj.properties = account.webProperties.map(function(property){
-              var propertyObj = {};
-              propertyObj.name = property.name;
-              propertyObj.id = property.id;
-              propertyObj.views = property.profiles.map(function(view){
-                var viewObj = {};
-                viewObj.name = view.name;
-                viewObj.id = view.id;
-                return viewObj;
-              });
-              return propertyObj;
-            });
-            return accountObj;
+    var parseAccountTree = function(accountSummariesResponse){
+      var accountsTree = accountSummariesResponse.result.items.map(function(account){
+        var accountObj = {};
+        accountObj.name = account.name;
+        accountObj.id = account.id;
+        accountObj.properties = account.webProperties.map(function(property){
+          var propertyObj = {};
+          propertyObj.name = property.name;
+          propertyObj.id = property.id;
+          propertyObj.views = property.profiles.map(function(view){
+            var viewObj = {};
+            viewObj.name = view.name;
+            viewObj.id = view.id;
+            return viewObj;
           });
-          console.log('account tree is updated');
-          status.accountsTreeLoaded = true;
-          $rootScope.$digest();
-          deferred.resolve(items.accountsTree);
-        }, function(error){
-          console.log('error updating account tree');
-          status.accountsTreeLoaded = false;
-          deferred.reject(error);
+          return propertyObj;
         });
-      return deferred.promise;
+        return accountObj;
+      });
+      items.accountsTree = accountsTree.slice();
+      status.accountsTreeLoaded = true;
+      console.log('account tree is updated');
+      return accountsTree;
     };
 
-    // get all accessible segments
-    var querySegments = function(){
-      var deferred = $q.defer();
-      window.gapi.client.analytics.management.segments.list().then(function(results){
-        items.segments = results.result.items.map(function(segment){
-          return _.pick(segment,['name','segmentId','type','definition']);
-        });
-        console.log('segment list is updated');
-        status.segmentsLoaded = true;
-        $rootScope.$digest();
-        deferred.resolve(items.segments);
-      }, function(error){
-        console.log('error updating segments');
-        status.segmentsLoaded = false;
-        deferred.reject(error);
-      });
+    var queryAccounts = function() {
+      return window.gapi.client.analytics.management.accountSummaries.list()
+        .then(parseAccountTree, handleError('error updating account tree'));
     };
+
+
+
+    var parseSegments = function(rawSegments){
+      var segments = rawSegments.result.items.map(function(segment){
+        return _.pick(segment,['name','segmentId','type','definition']);
+      });
+      items.segments = segments.slice();
+      status.segmentsLoaded = true;
+      console.log('segment list is updated');
+      return segments;
+    };
+
+    var querySegments = function(){
+      return window.gapi.client.analytics.management.segments.list().then(parseSegments, handleError('error updating segments'));
+    };
+
+
+
 
     // get metadata of the google analytics API
     // *** update descriptions
@@ -110,51 +115,73 @@ angular.module('angularGapiAnalyticsreporting')
     //     calculation
     //   }
     // ]
-    var queryMetadata = function() {
-      var deferred = $q.defer();
-      window.gapi.client.analytics.metadata.columns.list({
-        'reportType': 'ga'
-      }).then(function(response){
-          items.metadata = response.result.items.filter(function(item){
-            return item.attributes.status==='PUBLIC';
-          }).map(function(item){
-              var obj = {
-                id: item.id,
-                allowedInSegments: item.attributes.allowedInSegments,
-                dataType: item.attributes.dataType,
-                description: item.attributes.description,
-                group: item.attributes.group,
-                type: item.attributes.type,
-                uiName: item.attributes.uiName,
-                calculation: 'none'
-              };
-              if (item.attributes.calculation){
-                obj.calculation = item.attributes.calculation;
-              }
-              return obj;
+    var parseMetadata = function(rawMetadata){
+      var metadata = rawMetadata.result.items.filter(function(item){
+        return item.attributes.status==='PUBLIC';
+      }).map(function(item){
+          var obj = {
+            id: item.id,
+            allowedInSegments: item.attributes.allowedInSegments,
+            dataType: item.attributes.dataType,
+            description: item.attributes.description,
+            group: item.attributes.group,
+            type: item.attributes.type,
+            uiName: item.attributes.uiName,
+            calculation: 'none'
+          };
+          if (item.attributes.calculation){
+            obj.calculation = item.attributes.calculation;
+          }
+          return obj;
         });
-        // metadata = _.chain(response.result.items).filter(function(item){
-        //   return item.attributes.status==='PUBLIC';
-        // }).pick(['id','allowedInSegments','dataType','description','group','type','uiName','calculation']).value();
-        console.log('metadata is updated');
-        status.metadataLoaded = true;
-        $rootScope.$digest();
-        deferred.resolve(items.metadata);
-      }, function(error){
-        console.log('error updating metadata');
-        status.metadataLoaded = false;
-        deferred.reject(error);
+      items.metadata = metadata.slice();
+      status.metadataLoaded = true;
+      console.log('metadata is updated');
+      return metadata;
+    };
+
+    var queryMetadata = function() {
+      return window.gapi.client.analytics.metadata.columns.list({
+        'reportType': 'ga'
+      }).then(parseMetadata, handleError('error updating metadata'));
+    };
+
+
+    //gapi uses batch requests. Promise.all and $q.all would not work
+    var queryAll = function(){
+      var batch = window.gapi.client.newBatch();
+      batch.add(window.gapi.client.analytics.management.accountSummaries.list(), {'id': 'accounts'});
+      batch.add(window.gapi.client.analytics.management.segments.list(), {'id': 'segments'});
+      batch.add(window.gapi.client.analytics.metadata.columns.list({'reportType': 'ga'}), {'id': 'metadata'});
+      return batch.then(function(response){
+        return {
+          accountsTree: parseAccountTree(response.result.accounts),
+          segments: parseSegments(response.result.segments),
+          metdata: parseMetadata(response.result.metadata)
+        };
       });
     };
 
+
   // the public API
   return {
-    init: function(){
-      return queryAccounts()
-      .then(querySegments)
-      .then(queryMetadata);
+    init: queryAll,
+    queryAccounts: function(){
+      return queryAccounts.then(parseAccountTree);
+    },
+    querySegments: function(){
+      return querySegments.then(parseSegments);
+    },
+    queryMetadata: function(){
+      return queryMetadata.then(parseMetadata);
     },
     items: items,
+    getViewId: function(){
+      return viewId;
+    },
+    updateViewId: function(id){
+      viewId = id;
+    },
     status: status
   };
 
