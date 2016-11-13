@@ -8,10 +8,11 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, ngarLoadService, ngarAuthService) {
+  .controller('MainCtrl', function ($scope, ngarLoadService, ngarAuthService, ngarManagementService) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
+    $scope.managementStatus = ngarManagementService.status;
 
     $scope.load = function(){
       ngarLoadService.loadAllApis().then(function(){
@@ -48,10 +49,11 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       });
     };
 
-    $scope.getAccounts = function(){
-      console.log('getting accounts');
+    $scope.initManagementService = function(){
+      console.log('getting management data');
+      ngarManagementService.init().then(function(){
+        $scope.managementItems = ngarManagementService.items;
+      });
     };
-    $scope.getMetadata = function(){
-      console.log('getting metadata');
-    };
+
   });
