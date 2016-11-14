@@ -1,4 +1,4 @@
-<md-content layout-margin>
+<md-content flex layout-margin>
 
   <h2>
     Loading Google API
@@ -81,6 +81,18 @@
     <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgMetadata')">
       Show Metadata
     </md-button>
+  </div>
+
+  <h2>
+    View Selector
+  </h2>
+  <md-button ngar-view-selector class="md-primary md-raised md-hue-2">
+    Select View
+  </md-button>
+  <div>
+    <p><strong>Account:</strong>{{managementItems.breadcrumbs.account}}</p>
+    <p><strong>Property:</strong>{{managementItems.breadcrumbs.property}}</p>
+    <p><strong>View:</strong>{{managementItems.breadcrumbs.view}}</p>
   </div>
 
 

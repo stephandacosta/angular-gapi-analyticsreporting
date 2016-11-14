@@ -12,7 +12,8 @@ var demoApp = angular.module('angularGapiAnalyticsreportingDemoApp',
   [
     'ngMaterial',
     'ui.router',
-    'angularGapiAnalyticsreporting'
+    'angularGapiAnalyticsreporting',
+    'angularGapiAnalyticsreportingUI'
   ]
 );
 

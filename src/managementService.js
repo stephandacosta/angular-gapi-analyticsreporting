@@ -8,7 +8,9 @@
  * Factory in angular-gapi-reporting to load management API ressources
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarManagementService', function () {
+  .factory('ngarManagementService', function (appConstants) {
+
+    var defaultAccountsTree = appConstants.accountsTree;
 
     var status = {
       accountsTreeLoaded: false,
@@ -17,12 +19,13 @@ angular.module('angularGapiAnalyticsreporting')
     };
 
     var items = {
-      accountsTree : [],
+      accountsTree : defaultAccountsTree,
       segments : [],
-      metadata : []
+      metadata : [],
+      selectedViewId: '',
+      breadcrumbs: {}
     };
 
-    var viewId;
 
     // generic error handler
     var handleError = function(logmsg){
@@ -162,6 +165,29 @@ angular.module('angularGapiAnalyticsreporting')
       });
     };
 
+    var getBreadcrumbs = function(viewID){
+      items.accountsTree.forEach(function(account){
+        account.properties.forEach(function(property){
+          property.views.forEach(function(view){
+            if (view.id === viewID){
+              items.breadcrumbs = {
+                account: account.name,
+                property: property.name,
+                view: view.name
+              };
+              return;
+            }
+          });
+        });
+      });
+    };
+
+    var updateViewId = function(id){
+      console.log('updating view id', id);
+      items.selectedViewId = id;
+      getBreadcrumbs(id);
+    };
+
 
   // the public API
   return {
@@ -176,12 +202,7 @@ angular.module('angularGapiAnalyticsreporting')
       return queryMetadata.then(parseMetadata);
     },
     items: items,
-    getViewId: function(){
-      return viewId;
-    },
-    updateViewId: function(id){
-      viewId = id;
-    },
+    updateViewId: updateViewId,
     status: status
   };
 

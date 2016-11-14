@@ -13,6 +13,7 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
     $scope.managementStatus = ngarManagementService.status;
+    $scope.managementItems = ngarManagementService.items;
 
     $scope.load = function(){
       ngarLoadService.loadAllApis().then(function(){
