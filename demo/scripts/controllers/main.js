@@ -68,11 +68,10 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.initManagementService = function(){
       console.log('getting management data');
-      ngarManagementService.init().then(function(results){
+      ngarManagementService.init().then(function(){
         console.log('init done');
-        //results returns the object, but can also use the API ngarManagementService.items
-        // here kept for illustration
-        $scope.managementItems = results;
+        // promise returns the managmentService items
+        // but one can also use the API ngarManagementService.items
         $scope.$digest();
       });
     };
