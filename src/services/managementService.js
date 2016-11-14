@@ -11,6 +11,7 @@ angular.module('angularGapiAnalyticsreporting')
   .factory('ngarManagementService', function (appConstants) {
 
     var defaultAccountsTree = appConstants.accountsTree;
+    var defaultMetadata = appConstants.metadata;
 
     var status = {
       accountsTreeLoaded: false,
@@ -21,7 +22,7 @@ angular.module('angularGapiAnalyticsreporting')
     var items = {
       accountsTree : defaultAccountsTree,
       segments : [],
-      metadata : [],
+      metadata : defaultMetadata,
       selectedViewId: '',
       breadcrumbs: {}
     };
@@ -140,6 +141,7 @@ angular.module('angularGapiAnalyticsreporting')
       items.metadata = metadata.slice();
       status.metadataLoaded = true;
       console.log('metadata is updated');
+      console.log(metadata);
       return metadata;
     };
 

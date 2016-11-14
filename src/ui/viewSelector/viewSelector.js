@@ -36,7 +36,7 @@ ngarUI.factory('ngarViewSelectorService', function (ngarManagementService, $mdPa
         position: panelPosition,
         zIndex: 1000,
         panelClass : 'viewSelector',
-        templateUrl: 'src/viewSelector.html',
+        templateUrl: 'src/ui/viewSelector/viewSelector.html',
         clickOutsideToClose: true,
         escapeToClose: true,
         focusOnOpen: true,
