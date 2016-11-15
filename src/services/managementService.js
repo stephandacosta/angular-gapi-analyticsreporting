@@ -12,6 +12,7 @@ angular.module('angularGapiAnalyticsreporting')
 
     var defaultAccountsTree = appConstants.accountsTree;
     var defaultMetadata = appConstants.metadata;
+    var defaultSegments = appConstants.segments;
 
     var status = {
       accountsTreeLoaded: false,
@@ -21,7 +22,7 @@ angular.module('angularGapiAnalyticsreporting')
 
     var items = {
       accountsTree : defaultAccountsTree,
-      segments : [],
+      segments : defaultSegments,
       metadata : defaultMetadata,
       selectedViewId: '',
       breadcrumbs: {}
@@ -141,7 +142,6 @@ angular.module('angularGapiAnalyticsreporting')
       items.metadata = metadata.slice();
       status.metadataLoaded = true;
       console.log('metadata is updated');
-      console.log(metadata);
       return metadata;
     };
 

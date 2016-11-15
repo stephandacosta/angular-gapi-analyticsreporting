@@ -96,4 +96,42 @@
   </div>
 
 
+  <h2>
+    Building Requests
+  </h2>
+
+  <h3>
+    Pick Dates
+  </h3>
+  <div layout="row" layout-padding>
+    <div layout="column">
+      <label class="md-subhead">Start Date</label>
+      <md-datepicker ng-model="mindate" ng-change="openEndDate()" md-hide-icons="triangle" md-open-on-focus ng-required></md-datepicker>
+    </div>
+    <div layout="column">
+      <label class="md-subhead">End Date</label>
+      <md-datepicker ng-model="maxdate" md-hide-icons="triangle" md-is-open="endDateIsOpen"  md-open-on-focus ng-required></md-datepicker>
+    </div>
+  </div>
+
+  <h3>
+    Select Dimensions
+  </h3>
+  <ngar-measurement-selector type="DIMENSION"></ngar-measurement-selector>
+
+  <h3>
+    Select Metrics
+  </h3>
+  <ngar-measurement-selector type="METRIC"></ngar-measurement-selector>
+
+  <h3>
+    Select Segments
+  </h3>
+  <ngar-measurement-selector type="SEGMENT"></ngar-measurement-selector>
+
+
+  <md-button ng-click="buildRequest()" class="md-primary md-raised md-hue-2">
+    Build Request
+  </md-button>
+
 </md-content>

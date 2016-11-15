@@ -4723,6 +4723,158 @@ angular.module('angularGapiAnalyticsreporting')
         "uiName": "Transactions per User",
         "calculation": "none"
       }
+    ],
+    segments:
+    [
+      {
+        "name": "All Users",
+        "segmentId": "gaid::-1",
+        "type": "BUILT_IN",
+        "definition": ""
+      },
+      {
+        "name": "New Users",
+        "segmentId": "gaid::-2",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:userType==New Visitor"
+      },
+      {
+        "name": "Returning Users",
+        "segmentId": "gaid::-3",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:userType==Returning Visitor"
+      },
+      {
+        "name": "Paid Traffic",
+        "segmentId": "gaid::-4",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:medium=~^(cpc|ppc|cpa|cpm|cpv|cpp)$"
+      },
+      {
+        "name": "Organic Traffic",
+        "segmentId": "gaid::-5",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:medium==organic"
+      },
+      {
+        "name": "Search Traffic",
+        "segmentId": "gaid::-6",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:medium=~^(cpc|ppc|cpa|cpm|cpv|cpp|organic)$"
+      },
+      {
+        "name": "Direct Traffic",
+        "segmentId": "gaid::-7",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:medium==(none)"
+      },
+      {
+        "name": "Referral Traffic",
+        "segmentId": "gaid::-8",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:medium==referral"
+      },
+      {
+        "name": "Sessions with Conversions",
+        "segmentId": "gaid::-9",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:goalCompletionsAll>0"
+      },
+      {
+        "name": "Sessions with Transactions",
+        "segmentId": "gaid::-10",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:transactions>0"
+      },
+      {
+        "name": "Mobile and Tablet Traffic",
+        "segmentId": "gaid::-11",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:deviceCategory==mobile,ga:deviceCategory==tablet"
+      },
+      {
+        "name": "Non-bounce Sessions",
+        "segmentId": "gaid::-12",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:bounces==0"
+      },
+      {
+        "name": "Tablet Traffic",
+        "segmentId": "gaid::-13",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:deviceCategory==tablet"
+      },
+      {
+        "name": "Mobile Traffic",
+        "segmentId": "gaid::-14",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:deviceCategory==mobile"
+      },
+      {
+        "name": "Tablet and Desktop Traffic",
+        "segmentId": "gaid::-15",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:deviceCategory==tablet,ga:deviceCategory==desktop"
+      },
+      {
+        "name": "Android Traffic",
+        "segmentId": "gaid::-16",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:operatingSystem==Android"
+      },
+      {
+        "name": "iOS Traffic",
+        "segmentId": "gaid::-17",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:operatingSystem=~^(iOS|iPad|iPhone|iPod)$"
+      },
+      {
+        "name": "Other Traffic (Neither iOS nor Android)",
+        "segmentId": "gaid::-18",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:operatingSystem!~^(Android|iOS|iPad|iPhone|iPod)$"
+      },
+      {
+        "name": "Bounced Sessions",
+        "segmentId": "gaid::-19",
+        "type": "BUILT_IN",
+        "definition": "sessions::condition::ga:bounces>0"
+      },
+      {
+        "name": "Single Session Users",
+        "segmentId": "gaid::-100",
+        "type": "BUILT_IN",
+        "definition": "users::condition::ga:sessions==1"
+      },
+      {
+        "name": "Multi-session Users",
+        "segmentId": "gaid::-101",
+        "type": "BUILT_IN",
+        "definition": "users::condition::ga:sessions>1"
+      },
+      {
+        "name": "Converters",
+        "segmentId": "gaid::-102",
+        "type": "BUILT_IN",
+        "definition": "users::condition::ga:goalCompletionsAll>0,ga:transactions>0"
+      },
+      {
+        "name": "Non-Converters",
+        "segmentId": "gaid::-103",
+        "type": "BUILT_IN",
+        "definition": "users::condition::ga:goalCompletionsAll==0;ga:transactions==0"
+      },
+      {
+        "name": "Made a Purchase",
+        "segmentId": "gaid::-104",
+        "type": "BUILT_IN",
+        "definition": "users::condition::ga:transactions>0"
+      },
+      {
+        "name": "Performed Site Search",
+        "segmentId": "gaid::-105",
+        "type": "BUILT_IN",
+        "definition": "users::sequence::ga:searchKeyword!~^$|^\\(not set\\)$"
+      }
     ]
-
   });

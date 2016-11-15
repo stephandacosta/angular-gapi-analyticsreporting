@@ -106,5 +106,21 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       });
     };
 
+    $scope.openEndDate = function(){
+      $scope.endDateIsOpen=true;
+    };
+    $scope.closeEndDate = function(){
+      $scope.endDateIsOpen=false;
+    };
+
+    // var buildRequest = function(){
+        // var startDate = moment().subtract(1, 'days').toDate();
+        // var endDate = moment().subtract(60, 'days').toDate();
+      // var yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
+      // var thirtydaysAgo = moment().subtract(60, 'days').format('YYYY-MM-DD');
+      // $scope.request = ngarReportService.buildRequest(yesterday, thirtydaysAgo){
+      //
+      // }
+    // };
 
   });
