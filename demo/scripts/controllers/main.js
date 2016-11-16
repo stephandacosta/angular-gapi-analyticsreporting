@@ -80,6 +80,10 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
         dgRequest:{
           title: 'Request',
           code: ngarReportService.report.request
+        },
+        dgDataRaw:{
+          title: 'Raw Data',
+          code: ngarReportService.report.data
         }
       };
       $mdDialog.show({
@@ -127,5 +131,12 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       var request = ngarReportService.buildRequest();
       $scope.requestBuilt = (Object.keys(request).length);
     };
+
+    $scope.getData = function(){
+      ngarReportService.getData(window.gapi).then(function(){
+        $scope.dataPulled = true;
+      });
+    };
+
 
   });

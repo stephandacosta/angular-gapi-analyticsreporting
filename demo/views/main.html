@@ -129,14 +129,32 @@
   </h3>
   <ngar-measurement-selector type="SEGMENT"></ngar-measurement-selector>
 
+  <h3>
+    Format Request
+  </h3>
+  <div>
+    <md-button ng-click="buildRequest()" class="md-primary md-raised md-hue-2">
+      Build Request
+    </md-button>
+    <md-icon ng-if="requestBuilt" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!requestBuilt" style="color:red;">not_interested</md-icon>
+    <md-button class="md-raised" ng-if="requestBuilt" ng-click="showDialog($event, 'dgRequest')">
+      Show Request
+    </md-button>
+  </div>
 
-  <md-button ng-click="buildRequest()" class="md-primary md-raised md-hue-2">
-    Build Request
-  </md-button>
-  <md-icon ng-if="requestBuilt" style="color:green;">check_circle</md-icon>
-  <md-icon ng-if="!requestBuilt" style="color:red;">not_interested</md-icon>
-  <md-button class="md-raised" ng-if="requestBuilt" ng-click="showDialog($event, 'dgRequest')">
-    Show Request
-  </md-button>
+  <h2>
+    Getting Data
+  </h2>
+  <div>
+    <md-button ng-click="getData()" class="md-primary md-raised md-hue-2">
+      Get Data
+    </md-button>
+    <md-icon ng-if="dataPulled" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!dataPulled" style="color:red;">not_interested</md-icon>
+    <md-button class="md-raised" ng-if="dataPulled" ng-click="showDialog($event, 'dgDataRaw')">
+      Show Raw Data
+    </md-button>
+  </div>
 
 </md-content>

@@ -68,13 +68,15 @@ angular.module('angularGapiAnalyticsreporting')
 
     };
 
-    var getData = function(gapi, request) {
+    var getData = function(gapi, requestOverride) {
       // Call the Analytics Reporting API V4 batchGet method.
+      var request = requestOverride || report.request;
       var deferred = $q.defer();
       gapi.client.analyticsreporting.reports.batchGet(request)
         .then(function(response){
           console.log('request successfull');
-          deferred.resolve(response);
+          report.data = response.result;
+          deferred.resolve(response.result);
         }, function(error){
           console.log('error making reporting request', error);
           deferred.reject(error);
