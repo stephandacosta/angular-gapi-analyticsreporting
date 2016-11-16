@@ -167,12 +167,14 @@ angular.module('angularGapiAnalyticsreporting')
       });
     };
 
+    // ugly brute force need to use recursion
     var getBreadcrumbs = function(viewID){
+      var breadcrumbs = {};
       items.accountsTree.forEach(function(account){
         account.properties.forEach(function(property){
           property.views.forEach(function(view){
             if (view.id === viewID){
-              items.breadcrumbs = {
+              breadcrumbs = {
                 account: account.name,
                 property: property.name,
                 view: view.name
@@ -182,13 +184,9 @@ angular.module('angularGapiAnalyticsreporting')
           });
         });
       });
+      return breadcrumbs;
     };
 
-    var updateViewId = function(id){
-      console.log('updating view id', id);
-      items.selectedViewId = id;
-      getBreadcrumbs(id);
-    };
 
 
   // the public API
@@ -204,7 +202,7 @@ angular.module('angularGapiAnalyticsreporting')
       return queryMetadata.then(parseMetadata);
     },
     items: items,
-    updateViewId: updateViewId,
+    getBreadcrumbs: getBreadcrumbs,
     status: status
   };
 

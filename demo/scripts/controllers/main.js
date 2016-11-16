@@ -8,7 +8,7 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService) {
+  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
@@ -51,20 +51,6 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
 
-    var dialogs = {
-      dgAccountTree:{
-        title: 'Account Tree',
-        itemKey: 'accountsTree'
-      },
-      dgSegments:{
-        title: 'Segments',
-        itemKey: 'segments'
-      },
-      dgMetadata:{
-        title: 'Metadata',
-        itemKey: 'metadata'
-      }
-    };
 
     $scope.initManagementService = function(){
       console.log('getting management data');
@@ -78,6 +64,24 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
 
     $scope.showDialog = function(ev, id) {
+      var dialogs = {
+        dgAccountTree:{
+          title: 'Account Tree',
+          code: ngarManagementService.items.accountsTree
+        },
+        dgSegments:{
+          title: 'Segments',
+          code: ngarManagementService.items.segments
+        },
+        dgMetadata:{
+          title: 'Metadata',
+          code: ngarManagementService.items.metadata
+        },
+        dgRequest:{
+          title: 'Request',
+          code: ngarReportService.report.request
+        }
+      };
       $mdDialog.show({
         controller: function($scope, $mdDialog, title, code) {
           $scope.title = title;
@@ -101,10 +105,16 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
             '</md-dialog>',
        locals: {
          title: dialogs[id].title,
-         code: ngarManagementService.items[dialogs[id].itemKey]
+         code: dialogs[id].code
        }
       });
     };
+
+    $scope.$watch(function(){
+      return ngarReportService.report.viewId;
+    }, function(id){
+      $scope.breadcrumbs = ngarManagementService.getBreadcrumbs(id);
+    });
 
     $scope.openEndDate = function(){
       $scope.endDateIsOpen=true;
@@ -113,14 +123,9 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       $scope.endDateIsOpen=false;
     };
 
-    // var buildRequest = function(){
-        // var startDate = moment().subtract(1, 'days').toDate();
-        // var endDate = moment().subtract(60, 'days').toDate();
-      // var yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
-      // var thirtydaysAgo = moment().subtract(60, 'days').format('YYYY-MM-DD');
-      // $scope.request = ngarReportService.buildRequest(yesterday, thirtydaysAgo){
-      //
-      // }
-    // };
+    $scope.buildRequest = function(){
+      var request = ngarReportService.buildRequest();
+      $scope.requestBuilt = (Object.keys(request).length);
+    };
 
   });

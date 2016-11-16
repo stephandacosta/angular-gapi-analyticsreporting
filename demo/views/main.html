@@ -90,9 +90,9 @@
     Select View
   </md-button>
   <div>
-    <p><strong>Account:</strong>{{managementItems.breadcrumbs.account}}</p>
-    <p><strong>Property:</strong>{{managementItems.breadcrumbs.property}}</p>
-    <p><strong>View:</strong>{{managementItems.breadcrumbs.view}}</p>
+    <p><strong>Account:</strong>{{breadcrumbs.account}}</p>
+    <p><strong>Property:</strong>{{breadcrumbs.property}}</p>
+    <p><strong>View:</strong>{{breadcrumbs.view}}</p>
   </div>
 
 
@@ -132,6 +132,11 @@
 
   <md-button ng-click="buildRequest()" class="md-primary md-raised md-hue-2">
     Build Request
+  </md-button>
+  <md-icon ng-if="requestBuilt" style="color:green;">check_circle</md-icon>
+  <md-icon ng-if="!requestBuilt" style="color:red;">not_interested</md-icon>
+  <md-button class="md-raised" ng-if="requestBuilt" ng-click="showDialog($event, 'dgRequest')">
+    Show Request
   </md-button>
 
 </md-content>

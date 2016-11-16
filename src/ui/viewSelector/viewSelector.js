@@ -57,7 +57,7 @@ ngarUI.factory('ngarViewSelectorService', function (ngarManagementService, $mdPa
 
   })
 
-  .controller('ViewSelectorCtrl', function($scope, mdPanelRef, ngarManagementService, accounts){
+  .controller('ViewSelectorCtrl', function($scope, mdPanelRef, ngarManagementService, ngarReportService, accounts){
     $scope.accounts = accounts;
     $scope._mdPanelRef = mdPanelRef;
     $scope.closePanel = function(){
@@ -78,7 +78,7 @@ ngarUI.factory('ngarViewSelectorService', function (ngarManagementService, $mdPa
      });
     };
     $scope.selectView = function(viewID){
-     ngarManagementService.updateViewId(viewID);
+     ngarReportService.updateViewId(viewID);
      $scope.closePanel();
     };
   })

@@ -23,9 +23,15 @@ angular.module('angularGapiAnalyticsreportingUI')
 
   })
 
-  .controller('MeasurementSelectorCtrl', function($scope, ngarFilter, ngarManagementService){
+  .controller('MeasurementSelectorCtrl', function($scope, ngarFilter, ngarManagementService, ngarReportService){
 
-    $scope.selectedMeasurements = [];
+    var measurementMap = {
+      'DIMENSION' : 'dimensions',
+      'METRIC': 'metrics',
+      'SEGMENT': 'segments'
+    };
+    $scope.selectedMeasurements = ngarReportService.report[measurementMap[$scope.type]];
+
     $scope.selectMeasurement = function(measurement){
       if (measurement){
         $scope.selectedMeasurements.push(measurement);
