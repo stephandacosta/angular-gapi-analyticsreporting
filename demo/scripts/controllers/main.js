@@ -120,12 +120,6 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       $scope.breadcrumbs = ngarManagementService.getBreadcrumbs(id);
     });
 
-    $scope.openEndDate = function(){
-      $scope.endDateIsOpen=true;
-    };
-    $scope.closeEndDate = function(){
-      $scope.endDateIsOpen=false;
-    };
 
     $scope.buildRequest = function(){
       var request = ngarReportService.buildRequest();
