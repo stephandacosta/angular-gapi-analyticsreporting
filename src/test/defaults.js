@@ -4876,5 +4876,345 @@ angular.module('angularGapiAnalyticsreporting')
         "type": "BUILT_IN",
         "definition": "users::sequence::ga:searchKeyword!~^$|^\\(not set\\)$"
       }
-    ]
+    ],
+    rawData :
+    {
+     "reports": [
+       {
+         "columnHeader": {
+           "dimensions": [
+             "ga:date",
+             "ga:sourceMedium",
+             "ga:segment"
+           ],
+           "metricHeader": {
+             "metricHeaderEntries": [
+               {
+                 "name": "ga:sessions",
+                 "type": "INTEGER"
+               },
+               {
+                 "name": "ga:users",
+                 "type": "INTEGER"
+               }
+             ]
+           }
+         },
+         "data": {
+           "rows": [
+             {
+               "dimensions": [
+                 "20161101",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "3",
+                     "2"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161101",
+                 "google / organic",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "7",
+                     "7"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161102",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161103",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161104",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "2",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161104",
+                 "google / organic",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "10",
+                     "10"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161105",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "2",
+                     "2"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161106",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161108",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161108",
+                 "abcdefh.xyz / referral",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161108",
+                 "google / organic",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "9",
+                     "9"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161109",
+                 "alfabot.xyz / referral",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161110",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "2",
+                     "2"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161111",
+                 "arendovalka.xyz / referral",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161113",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161113",
+                 "begalka.xyz / referral",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161113",
+                 "google / organic",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "10",
+                     "10"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161114",
+                 "(direct) / (none)",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             },
+             {
+               "dimensions": [
+                 "20161115",
+                 "boltalko.xyz / referral",
+                 "All Users"
+               ],
+               "metrics": [
+                 {
+                   "values": [
+                     "1",
+                     "1"
+                   ]
+                 }
+               ]
+             }
+           ],
+           "totals": [
+             {
+               "values": [
+                 "56",
+                 "54"
+               ]
+             }
+           ],
+           "rowCount": 19,
+           "minimums": [
+             {
+               "values": [
+                 "1",
+                 "1"
+               ]
+             }
+           ],
+           "maximums": [
+             {
+               "values": [
+                 "10",
+                 "10"
+               ]
+             }
+           ]
+         }
+       }
+     ]
+    }
   });

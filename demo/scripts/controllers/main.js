@@ -8,7 +8,7 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService) {
+  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
@@ -84,6 +84,10 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
         dgDataRaw:{
           title: 'Raw Data',
           code: ngarReportService.report.data
+        },
+        dgDataParsed:{
+          title: 'Parsed Data',
+          code: ngarDataService.parsedData
         }
       };
       $mdDialog.show({
@@ -130,6 +134,11 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       ngarReportService.getData(window.gapi).then(function(){
         $scope.dataPulled = true;
       });
+    };
+
+    $scope.parseData = function(){
+      ngarDataService.parseData(ngarReportService.report.data);
+      $scope.dataParsed = true;
     };
 
 
