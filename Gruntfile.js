@@ -163,6 +163,24 @@ module.exports = function (grunt) {
       }
     },
 
+    // used for creating templates in javascript
+    // htmlConvert: {
+    //   options: {
+    //     rename: function (moduleName) {
+    //       return '/' + moduleName.replace('.html', '');
+    //     },
+    //     quoteChar: '\'',
+    //
+    //     // custom options, see below
+    //   },
+    //   mytemplate: {
+    //     src: ['src/ui/**/*.html'],
+    //     dest: 'src/ui/templatesJs/templates.js'
+    //   },
+    // },
+
+
+
     // Empties folders to start fresh
     clean: {
       dist: {

@@ -39,6 +39,16 @@ angular.module('angularGapiAnalyticsreportingUI')
         type:'@'
       },
       controller: 'DateSelectorCtrl',
-      templateUrl: 'src/ui/dateSelector/dateSelector.html'
+      template:
+         '<div layout="row" layout-padding>\n' +
+         '  <div layout="column">\n' +
+         '    <label class="md-subhead">Start Date </label>\n' +
+         '    <md-datepicker ng-model="dateStart" ng-change="openEndDate()" md-hide-icons="triangle" md-open-on-focus ng-required></md-datepicker>\n' +
+         '  </div>\n' +
+         '  <div layout="column">\n' +
+         '    <label class="md-subhead">End Date</label>\n' +
+         '    <md-datepicker ng-model="dateEnd" md-hide-icons="triangle" md-is-open="endDateIsOpen"  md-open-on-focus ng-required></md-datepicker>\n' +
+         '  </div>\n' +
+         '</div>\n'
     };
   });
