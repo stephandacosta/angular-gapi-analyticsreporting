@@ -30,7 +30,7 @@ angular.module('angularGapiAnalyticsreportingUI')
       'METRIC': 'metrics',
       'SEGMENT': 'segments'
     };
-    $scope.selectedMeasurements = ngarReportService.report[measurementMap[$scope.type]];
+    $scope.selectedMeasurements = ngarReportService.params[measurementMap[$scope.type]];
 
     $scope.selectMeasurement = function(measurement){
       if (measurement){

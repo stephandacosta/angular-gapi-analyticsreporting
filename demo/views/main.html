@@ -162,4 +162,25 @@
     </md-button>
   </div>
 
+  <h2>
+    Macros
+  </h2>
+  <div>
+    <md-button ng-click="initAtOnce()" class="md-primary md-raised md-hue-2">
+      Init
+    </md-button>
+    <md-icon ng-if="authStatus.signedIn" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!authStatus.signedIn" style="color:red;">not_interested</md-icon>
+  </div>
+  <div>
+    <md-button ng-click="makeAtOnce()" class="md-primary md-raised md-hue-2">
+      Get
+    </md-button>
+    <md-icon ng-if="dataParsed" style="color:green;">check_circle</md-icon>
+    <md-icon ng-if="!dataParsed" style="color:red;">not_interested</md-icon>
+    <md-button class="md-raised" ng-if="dataParsed" ng-click="showDialog($event, 'dgDataParsed')">
+      Show Parsed Data
+    </md-button>
+  </div>
+
 </md-content>

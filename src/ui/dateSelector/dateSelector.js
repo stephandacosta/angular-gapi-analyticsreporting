@@ -12,14 +12,14 @@ angular.module('angularGapiAnalyticsreportingUI')
 
   .controller('DateSelectorCtrl', function($scope, ngarReportService){
 
-    $scope.dateStart = ngarReportService.report.dateStart;
-    $scope.dateEnd = ngarReportService.report.dateEnd;
+    $scope.dateStart = ngarReportService.params.dateStart;
+    $scope.dateEnd = ngarReportService.params.dateEnd;
 
     $scope.$watch('dateStart', function(newDate){
-      ngarReportService.report.dateStart = newDate;
+      ngarReportService.params.dateStart = newDate;
     });
     $scope.$watch('dateEnd', function(newDate){
-      ngarReportService.report.dateEnd = newDate;
+      ngarReportService.params.dateEnd = newDate;
     });
 
     $scope.openEndDate = function(){

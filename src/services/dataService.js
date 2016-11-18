@@ -92,11 +92,21 @@ angular.module('angularGapiAnalyticsreporting')
         });
       }
 
+      return parsedData;
+
     };
 
     return {
       parseData: parseData,
       parsedData: parsedData,
+      cleanData: function(){
+        parsedData = {
+          data: [],
+          dimensions: [], // array of metadata objects
+          metrics: [], // array of metadata objects
+          segments: [], //array of segments
+        };
+      },
       getItemsOfDimension: function(dimension){
         return parsedData.dimensions.find(function(dimObj){
           return dimObj.name===dimension;

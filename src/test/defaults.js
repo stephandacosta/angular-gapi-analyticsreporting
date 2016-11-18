@@ -4877,6 +4877,38 @@ angular.module('angularGapiAnalyticsreporting')
         "definition": "users::sequence::ga:searchKeyword!~^$|^\\(not set\\)$"
       }
     ],
+    request:
+    {
+      "reportRequests": [
+        {
+          "viewId": "93059217",
+          "dateRanges": [
+            {
+              "startDate": "2016-11-17",
+              "endDate": "2016-11-17"
+            }
+          ],
+          "dimensions": [
+            {
+              "name": "ga:date"
+            },
+            {
+              "name": "ga:segment"
+            }
+          ],
+          "metrics": [
+            {
+              "expression": "ga:sessions"
+            }
+          ],
+          "segments": [
+            {
+              "segmentId": "gaid::-1"
+            }
+          ]
+        }
+      ]
+    },
     rawData :
     {
      "reports": [

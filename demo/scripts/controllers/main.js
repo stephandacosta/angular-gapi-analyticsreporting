@@ -8,7 +8,7 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService) {
+  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService, ngar) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
@@ -79,11 +79,11 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
         },
         dgRequest:{
           title: 'Request',
-          code: ngarReportService.report.request
+          code: ngarReportService.request.json
         },
         dgDataRaw:{
           title: 'Raw Data',
-          code: ngarReportService.report.data
+          code: ngarReportService.request.rawData
         },
         dgDataParsed:{
           title: 'Parsed Data',
@@ -119,7 +119,7 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.$watch(function(){
-      return ngarReportService.report.viewId;
+      return ngarReportService.params.viewId;
     }, function(id){
       $scope.breadcrumbs = ngarManagementService.getBreadcrumbs(id);
     });
@@ -127,18 +127,55 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.buildRequest = function(){
       var request = ngarReportService.buildRequest();
+      console.log(request);
       $scope.requestBuilt = (Object.keys(request).length);
     };
 
+    $scope.$watch(function(){
+      return (Object.keys(ngarReportService.request.json).length>0);
+    }, function(hasRequest){
+      $scope.requestBuilt = hasRequest;
+    });
+
     $scope.getData = function(){
-      ngarReportService.getData(window.gapi).then(function(){
-        $scope.dataPulled = true;
+      ngarReportService.getData(window.gapi)
+      .then(function(rawData){
+        console.log(rawData);
       });
     };
 
+
+    $scope.$watch(function(){
+      return Object.keys(ngarReportService.request.rawData).length>0;
+    }, function(hasData){
+      $scope.dataPulled = hasData;
+    });
+
+
+
     $scope.parseData = function(){
-      ngarDataService.parseData(ngarReportService.report.data);
-      $scope.dataParsed = true;
+      console.log(ngarDataService.parseData(ngarReportService.request.rawData));
+    };
+
+    $scope.$watch(function(){
+      return ngarDataService.parsedData.data.length>0;
+    }, function(hasParsedData){
+      $scope.dataParsed = hasParsedData;
+    });
+
+    $scope.initAtOnce = function(){
+      ngar.init();
+    };
+
+    $scope.makeAtOnce = function(){
+      var params = {
+          viewId : '122523409',
+          dateStart: moment().subtract(60, 'days').toDate(),
+          dateEnd: moment().subtract(1, 'days').toDate(),
+          dimensions: ['ga:date','ga:sourceMedium'],
+          metrics: ['ga:sessions','ga:users']
+      };
+      ngar.get(params);
     };
 
 

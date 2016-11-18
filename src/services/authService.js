@@ -87,6 +87,13 @@ angular.module('angularGapiAnalyticsreporting')
     initAuth: initAuth,
     signIn: signIn,
     signOut: signOut,
+    isSignedIn: function(){
+      if (auth2){
+        return auth2.isSignedIn.get();
+      } else {
+        return false;
+      }
+    },
     status: status
   };
 
