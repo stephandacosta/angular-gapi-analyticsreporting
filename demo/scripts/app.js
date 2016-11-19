@@ -23,7 +23,7 @@ demoApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
       url: '/',
-      templateUrl: '../views/main.html',
+      templateUrl: 'views/main.html',
       controller: 'MainCtrl'
     });
 });
