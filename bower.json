@@ -31,7 +31,5 @@
     "angular-ui-router": "^0.3.2",
     "angular-mocks": "^1.4.0"
   },
-  "demoPath": "demo",
-  "pluginPath": "src",
   "moduleName": "angularGapiAnalyticsreportingDemoApp"
 }

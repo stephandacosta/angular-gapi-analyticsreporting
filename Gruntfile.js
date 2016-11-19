@@ -21,13 +21,19 @@ module.exports = function (grunt) {
 
   // Configurable paths for the application
   var yoConfig = {
-    demo: require('./bower.json').demoPath || 'demo',
-    plugin: require('./bower.json').pluginPath || 'src',
-    dist: 'dist'
+    demo: 'demo',
+    demodist: 'demodist',
+    ngar: 'src',
+    ngardist: 'ngardist'
   };
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+
+    pkg: {
+      name: require('./bower.json').name,
+      version: require('./bower.json').version
+    },
 
     // Project settings
     yeoman: yoConfig,
@@ -39,7 +45,7 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.demo %>/scripts/{,*/}*.js','<%= yeoman.plugin %>/{,**/}*.js'],
+        files: ['<%= yeoman.demo %>/scripts/{,*/}*.js','<%= yeoman.ngar %>/{,**/}*.js'],
         tasks: ['newer:jshint:all', 'newer:jscs:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -62,7 +68,6 @@ module.exports = function (grunt) {
         },
         files: [
           '<%= yeoman.demo %>/{,*/}*.html',
-          '<%= yeoman.plugin %>/{,**/}*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.demo %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -116,10 +121,10 @@ module.exports = function (grunt) {
           }
         }
       },
-      dist: {
+      demodist: {
         options: {
           open: true,
-          base: '<%= yeoman.dist %>'
+          base: '<%= yeoman.demodist %>'
         }
       }
     },
@@ -134,7 +139,7 @@ module.exports = function (grunt) {
         src: [
           'Gruntfile.js',
           '<%= yeoman.demo %>/scripts/{,*/}*.js',
-          '<%= yeoman.plugin %>/{,*/}*.js'
+          '<%= yeoman.ngar %>/{,*/}*.js'
         ]
       },
       test: {
@@ -155,7 +160,7 @@ module.exports = function (grunt) {
         src: [
           'Gruntfile.js',
           '<%= yeoman.demo %>/scripts/{,*/}*.js',
-          '<%= yeoman.plugin %>/{,*/}*.js'
+          '<%= yeoman.ngar %>/{,*/}*.js'
         ]
       },
       test: {
@@ -163,7 +168,7 @@ module.exports = function (grunt) {
       }
     },
 
-    // used for creating templates in javascript
+    // used for creating the UI templates in javascript
     // htmlConvert: {
     //   options: {
     //     rename: function (moduleName) {
@@ -183,13 +188,23 @@ module.exports = function (grunt) {
 
     // Empties folders to start fresh
     clean: {
-      dist: {
+      demodist: {
         files: [{
           dot: true,
           src: [
             '.tmp',
-            '<%= yeoman.dist %>/{,*/}*',
-            '!<%= yeoman.dist %>/.git{,*/}*'
+            '<%= yeoman.demodist %>/{,*/}*',
+            '!<%= yeoman.demodist %>/.git{,*/}*'
+          ]
+        }]
+      },
+      ngardist: {
+        files: [{
+          dot: true,
+          src: [
+            '.ngartmp',
+            '<%= yeoman.ngardist %>/{,*/}*',
+            '!<%= yeoman.ngardist %>/.git{,*/}*'
           ]
         }]
       },
@@ -214,12 +229,20 @@ module.exports = function (grunt) {
           dest: '.tmp/styles/'
         }]
       },
-      dist: {
+      demodist: {
         files: [{
           expand: true,
           cwd: '.tmp/styles/',
           src: '{,*/}*.css',
           dest: '.tmp/styles/'
+        }]
+      },
+      ngardist: {
+        files: [{
+          expand: true,
+          cwd: '.ngartmp/styles/',
+          src: '{,*/}*.css',
+          dest: '.ngartmp/styles/'
         }]
       }
     },
@@ -252,12 +275,20 @@ module.exports = function (grunt) {
 
     // Renames files for browser caching purposes
     filerev: {
-      dist: {
+      demodist: {
         src: [
-          '<%= yeoman.dist %>/scripts/{,*/}*.js',
-          '<%= yeoman.dist %>/styles/{,*/}*.css',
-          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= yeoman.dist %>/styles/fonts/*'
+          '<%= yeoman.demodist %>/scripts/{,*/}*.js',
+          '<%= yeoman.demodist %>/styles/{,*/}*.css',
+          '<%= yeoman.demodist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.demodist %>/styles/fonts/*'
+        ]
+      },
+      ngardist: {
+        src: [
+          '<%= yeoman.ngardist %>/scripts/{,*/}*.js',
+          '<%= yeoman.ngardist %>/styles/{,*/}*.css',
+          '<%= yeoman.ngardist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.ngardist %>/styles/fonts/*'
         ]
       }
     },
@@ -268,7 +299,7 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: '<%= yeoman.demo %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>',
+        dest: '<%= yeoman.demodist %>',
         flow: {
           html: {
             steps: {
@@ -283,14 +314,14 @@ module.exports = function (grunt) {
 
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-      js: ['<%= yeoman.dist %>/scripts/{,*/}*.js'],
+      html: ['<%= yeoman.demodist %>/{,*/}*.html'],
+      css: ['<%= yeoman.demodist %>/styles/{,*/}*.css'],
+      js: ['<%= yeoman.demodist %>/scripts/{,*/}*.js'],
       options: {
         assetsDirs: [
-          '<%= yeoman.dist %>',
-          '<%= yeoman.dist %>/images',
-          '<%= yeoman.dist %>/styles'
+          '<%= yeoman.demodist %>',
+          '<%= yeoman.demodist %>/images',
+          '<%= yeoman.demodist %>/styles'
         ],
         patterns: {
           js: [[/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']]
@@ -298,56 +329,79 @@ module.exports = function (grunt) {
       }
     },
 
-    // The following *-min tasks will produce minified files in the dist folder
+    // The following *-min tasks will produce minified files in the demodist folder
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
     // cssmin: {
-    //   dist: {
+    //   demodist: {
     //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
+    //       '<%= yeoman.demodist %>/styles/main.css': [
     //         '.tmp/styles/{,*/}*.css'
     //       ]
     //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
+    //   },
+    //   ngardist: {
     //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
+    //       '<%= yeoman.ngardist %>/styles/main.css': [
+    //         '.ngartmp/styles/{,*/}*.css'
     //       ]
     //     }
     //   }
     // },
+    //
+    // uglify: {
+    //   demodist: {
+    //     files: {
+    //       '<%= yeoman.demodist %>/scripts/scripts.js': [
+    //         '<%= yeoman.demodist %>/scripts/scripts.js'
+    //       ]
+    //     }
+    //   },
+    //   ngardist: {
+    //     files: {
+    //       '<%= yeoman.ngardist %>/scripts/scripts.js': [
+    //         '<%= yeoman.ngardist %>/scripts/scripts.js'
+    //       ]
+    //     }
+    //   }
+    // },
+    //
     // concat: {
-    //   dist: {}
+    //   demodist: {
+    //     src: ['.tmp/*.js'],
+    //     dest: 'ngardist/scripts/scripts.js',
+    //   },
+    //   ngardist: {
+    //     src: ['.ngartmp/*.js'],
+    //     dest: 'ngardist/scripts/scripts.js',
+    //   }
     // },
 
     imagemin: {
-      dist: {
+      demodist: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.demo %>/images',
           src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.demodist %>/images'
         }]
       }
     },
 
     svgmin: {
-      dist: {
+      demodist: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.demo %>/images',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.demodist %>/images'
         }]
       }
     },
 
     htmlmin: {
-      dist: {
+      demodist: {
         options: {
           collapseWhitespace: true,
           conservativeCollapse: true,
@@ -356,18 +410,18 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>',
+          cwd: '<%= yeoman.demodist %>',
           src: ['*.html'],
-          dest: '<%= yeoman.dist %>'
+          dest: '<%= yeoman.demodist %>'
         }]
       }
     },
 
     ngtemplates: {
-      dist: {
+      demodist: {
         options: {
           module: 'angularGapiAnalyticsreportingDemoApp',
-          htmlmin: '<%= htmlmin.dist.options %>',
+          htmlmin: '<%= htmlmin.demodist.options %>',
           usemin: 'scripts/scripts.js'
         },
         cwd: '<%= yeoman.demo %>',
@@ -379,31 +433,48 @@ module.exports = function (grunt) {
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
     ngAnnotate: {
-      dist: {
+      demodist: {
         files: [{
           expand: true,
           cwd: '.tmp/concat/scripts',
           src: '*.js',
           dest: '.tmp/concat/scripts'
         }]
+      },
+      ngardist: {
+        files: [{
+          expand: true,
+          cwd: '.ngartmp',
+          src: '*.js',
+          dest: '.ngartmp'
+        }]
       }
     },
 
     // Replace Google CDN references
     cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
+      demodist: {
+        html: ['<%= yeoman.demodist %>/*.html']
       }
     },
 
     // Copies remaining files to places other tasks can use
     copy: {
-      dist: {
+      demodist: {
         files: [{
           expand: true,
           dot: true,
+          cwd: '<%= yeoman.ngar %>',
+          dest: '<%= yeoman.demodist %>/src',
+          src: [
+            '**/*.js',
+            '**/*.css',
+          ]
+        },{
+          expand: true,
+          dot: true,
           cwd: '<%= yeoman.demo %>',
-          dest: '<%= yeoman.dist %>',
+          dest: '<%= yeoman.demodist %>',
           src: [
             '*.{ico,png,txt}',
             '*.html',
@@ -413,16 +484,51 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
+          dest: '<%= yeoman.demodist %>/images',
           src: ['generated/*']
         }]
+      },
+      scripts: {
+        expand: true,
+        cwd: '<%= yeoman.demo %>',
+        dest: '.tmp/scripts/',
+        src: '**/*.js'
       },
       styles: {
         expand: true,
         cwd: '<%= yeoman.demo %>/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      ngardist: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.ngar %>',
+          dest: '.ngartmp',
+          src: [
+            '*.js',
+            'services/*.js',
+            'ui/{,*/}*.js',
+            'ui/{,*/}*.css'
+          ]
+        },{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.ngar %>',
+          dest: '.ngartmp/styles',
+          src: [
+            'ui/{,*/}*.css'
+          ]
+        }]
       }
+      // ,
+      // stylesngar: {
+      //   expand: true,
+      //   cwd: '<%= yeoman.ngar %>/ui',
+      //   dest: '.tmp/styles/',
+      //   src: '{,*/}*.css'
+      // }
     },
 
     // Run some tasks in parallel to speed up the build process
@@ -433,7 +539,8 @@ module.exports = function (grunt) {
       test: [
         'copy:styles'
       ],
-      dist: [
+      demodist: [
+        'copy:scripts',
         'copy:styles',
         'imagemin',
         'svgmin'
@@ -451,8 +558,8 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+    if (target === 'demodist') {
+      return grunt.task.run(['demobuild', 'connect:demodist:keepalive']);
     }
 
     grunt.task.run([
@@ -465,10 +572,6 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run(['serve:' + target]);
-  });
 
   grunt.registerTask('test', [
     'clean:server',
@@ -479,22 +582,34 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:dist',
+  grunt.registerTask('demobuild', [
+    'clean:demodist',
     'wiredep',
     'useminPrepare',
-    'concurrent:dist',
-    'postcss',
+    'concurrent:demodist',
+    'postcss:demodist',
     'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
+    'concat:generated',
+    'ngAnnotate:demodist',
+    'copy:demodist',
     'cdnify',
+    'cssmin:generated',
+    'uglify:generated',
+    'filerev:demodist',
+    'usemin',
+    'htmlmin:demodist'
+  ]);
+
+  grunt.registerTask('ngarbuild', [
+    'clean:ngardist',
+    // 'concurrent:ngardist',
+    'copy:ngardist',
+    'ngAnnotate:ngardist',
+    'concat:ngardist',
     'cssmin',
     'uglify',
-    'filerev',
-    'usemin',
-    'htmlmin'
+    'postcss',
+    'filerev'
   ]);
 
   grunt.registerTask('default', [
