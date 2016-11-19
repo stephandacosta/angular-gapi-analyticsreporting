@@ -11,9 +11,15 @@
 
 var plugin = angular.module('angularGapiAnalyticsreporting',[]);
 
+var ngarUI = angular.module('angularGapiAnalyticsreportingUI',[]);
+
 // reminder to add error logging to analytics itself
 plugin.run(function(){
   console.log('ngar is running');
+});
+
+ngarUI.run(function(){
+  console.log('ngarUI is running');
 });
 
 plugin.factory('ngar', function(ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService){

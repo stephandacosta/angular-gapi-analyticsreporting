@@ -3,5 +3,6 @@
 /demodist
 /ngardist
 /.tmp
+/.ngartmp
 /.sass-cache
 /bower_components

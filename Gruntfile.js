@@ -97,6 +97,10 @@ module.exports = function (grunt) {
                 connect.static('./src')
               ),
               connect().use(
+                '/ngardist',
+                connect.static('./ngardist')
+              ),
+              connect().use(
                 '/demo/styles',
                 connect.static('./demo/styles')
               ),
@@ -228,23 +232,24 @@ module.exports = function (grunt) {
           src: '{,*/}*.css',
           dest: '.tmp/styles/'
         }]
-      },
-      demodist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.tmp/styles/'
-        }]
-      },
-      ngardist: {
-        files: [{
-          expand: true,
-          cwd: '.ngartmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.ngartmp/styles/'
-        }]
       }
+      // ,
+      // demodist: {
+      //   files: [{
+      //     expand: true,
+      //     cwd: '.tmp/styles/',
+      //     src: '{,*/}*.css',
+      //     dest: '.tmp/styles/'
+      //   }]
+      // },
+      // ngardist: {
+      //   files: [{
+      //     expand: true,
+      //     cwd: '.ngartmp/styles/',
+      //     src: '{,*/}*.css',
+      //     dest: '.ngartmp/styles/'
+      //   }]
+      // }
     },
 
     // Automatically inject Bower components into the demo
@@ -274,24 +279,24 @@ module.exports = function (grunt) {
     },
 
     // Renames files for browser caching purposes
-    filerev: {
-      demodist: {
-        src: [
-          '<%= yeoman.demodist %>/scripts/{,*/}*.js',
-          '<%= yeoman.demodist %>/styles/{,*/}*.css',
-          '<%= yeoman.demodist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= yeoman.demodist %>/styles/fonts/*'
-        ]
-      },
-      ngardist: {
-        src: [
-          '<%= yeoman.ngardist %>/scripts/{,*/}*.js',
-          '<%= yeoman.ngardist %>/styles/{,*/}*.css',
-          '<%= yeoman.ngardist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= yeoman.ngardist %>/styles/fonts/*'
-        ]
-      }
-    },
+    // filerev: {
+    //   demodist: {
+    //     src: [
+    //       '<%= yeoman.demodist %>/scripts/{,*/}*.js',
+    //       '<%= yeoman.demodist %>/styles/{,*/}*.css',
+    //       '<%= yeoman.demodist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+    //       '<%= yeoman.demodist %>/styles/fonts/*'
+    //     ]
+    //   },
+    //   ngardist: {
+    //     src: [
+    //       '<%= yeoman.ngardist %>/scripts/{,*/}*.js',
+    //       '<%= yeoman.ngardist %>/styles/{,*/}*.css',
+    //       '<%= yeoman.ngardist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+    //       '<%= yeoman.ngardist %>/styles/fonts/*'
+    //     ]
+    //   }
+    // },
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
@@ -315,8 +320,8 @@ module.exports = function (grunt) {
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
       html: ['<%= yeoman.demodist %>/{,*/}*.html'],
-      css: ['<%= yeoman.demodist %>/styles/{,*/}*.css'],
-      js: ['<%= yeoman.demodist %>/scripts/{,*/}*.js'],
+      css: ['<%= yeoman.demodist %>/styles{,*/}*.css'],
+      js: ['<%= yeoman.demodist %>/scripts{,*/}*.js'],
       options: {
         assetsDirs: [
           '<%= yeoman.demodist %>',
@@ -333,50 +338,37 @@ module.exports = function (grunt) {
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
-    // cssmin: {
-    //   demodist: {
-    //     files: {
-    //       '<%= yeoman.demodist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   },
-    //   ngardist: {
-    //     files: {
-    //       '<%= yeoman.ngardist %>/styles/main.css': [
-    //         '.ngartmp/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    //
-    // uglify: {
-    //   demodist: {
-    //     files: {
-    //       '<%= yeoman.demodist %>/scripts/scripts.js': [
-    //         '<%= yeoman.demodist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   },
-    //   ngardist: {
-    //     files: {
-    //       '<%= yeoman.ngardist %>/scripts/scripts.js': [
-    //         '<%= yeoman.ngardist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    //
-    // concat: {
-    //   demodist: {
-    //     src: ['.tmp/*.js'],
-    //     dest: 'ngardist/scripts/scripts.js',
-    //   },
-    //   ngardist: {
-    //     src: ['.ngartmp/*.js'],
-    //     dest: 'ngardist/scripts/scripts.js',
-    //   }
-    // },
+    cssmin: {
+      ngardist: {
+        files: {
+          '<%= yeoman.ngardist %>/ngar.min.css': [
+            '.ngartmp/{,*/}*.css'
+          ]
+        }
+      }
+    },
+
+    uglify: {
+      options: {
+        compress: {
+          drop_console: true
+        }
+      },
+      ngardist: {
+        files: {
+          '<%= yeoman.ngardist %>/ngar.min.js': [
+            '<%= yeoman.ngardist %>/ngar.js'
+          ]
+        }
+      }
+    },
+
+    concat: {
+      ngardist: {
+        src: ['.ngartmp/**/*.js'],
+        dest: 'ngardist/ngar.js',
+      }
+    },
 
     imagemin: {
       demodist: {
@@ -400,35 +392,35 @@ module.exports = function (grunt) {
       }
     },
 
-    htmlmin: {
-      demodist: {
-        options: {
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          collapseBooleanAttributes: true,
-          removeCommentsFromCDATA: true
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.demodist %>',
-          src: ['*.html'],
-          dest: '<%= yeoman.demodist %>'
-        }]
-      }
-    },
+    // htmlmin: {
+    //   demodist: {
+    //     options: {
+    //       collapseWhitespace: true,
+    //       conservativeCollapse: true,
+    //       collapseBooleanAttributes: true,
+    //       removeCommentsFromCDATA: true
+    //     },
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.demodist %>',
+    //       src: ['*.html'],
+    //       dest: '<%= yeoman.demodist %>'
+    //     }]
+    //   }
+    // },
 
-    ngtemplates: {
-      demodist: {
-        options: {
-          module: 'angularGapiAnalyticsreportingDemoApp',
-          htmlmin: '<%= htmlmin.demodist.options %>',
-          usemin: 'scripts/scripts.js'
-        },
-        cwd: '<%= yeoman.demo %>',
-        src: 'views/{,*/}*.html',
-        dest: '.tmp/templateCache.js'
-      }
-    },
+    // ngtemplates: {
+    //   demodist: {
+    //     options: {
+    //       module: 'angularGapiAnalyticsreportingDemoApp',
+    //       htmlmin: '<%= htmlmin.demodist.options %>',
+    //       usemin: 'scripts/scripts.js'
+    //     },
+    //     cwd: '<%= yeoman.demo %>',
+    //     src: 'views/{,*/}*.html',
+    //     dest: '.tmp/templateCache.js'
+    //   }
+    // },
 
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
@@ -445,7 +437,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.ngartmp',
-          src: '*.js',
+          src: '**/*.js',
           dest: '.ngartmp'
         }]
       }
@@ -464,6 +456,16 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
+          cwd: '<%= yeoman.demo %>',
+          dest: '<%= yeoman.demodist %>',
+          src: [
+            '**/*.js',
+            '**/*.css',
+            '**/*.html'
+          ]
+        },{
+          expand: true,
+          dot: true,
           cwd: '<%= yeoman.ngar %>',
           dest: '<%= yeoman.demodist %>/src',
           src: [
@@ -477,7 +479,6 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.demodist %>',
           src: [
             '*.{ico,png,txt}',
-            '*.html',
             'images/{,*/}*.{webp}',
             'styles/fonts/{,*/}*.*'
           ]
@@ -488,18 +489,6 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }]
       },
-      scripts: {
-        expand: true,
-        cwd: '<%= yeoman.demo %>',
-        dest: '.tmp/scripts/',
-        src: '**/*.js'
-      },
-      styles: {
-        expand: true,
-        cwd: '<%= yeoman.demo %>/styles',
-        dest: '.tmp/styles/',
-        src: '{,*/}*.css'
-      },
       ngardist: {
         files: [{
           expand: true,
@@ -508,6 +497,7 @@ module.exports = function (grunt) {
           dest: '.ngartmp',
           src: [
             '*.js',
+            'test/*.js',
             'services/*.js',
             'ui/{,*/}*.js',
             'ui/{,*/}*.css'
@@ -521,14 +511,13 @@ module.exports = function (grunt) {
             'ui/{,*/}*.css'
           ]
         }]
+      },
+      styles: {
+        expand: true,
+        cwd: '<%= yeoman.demo %>/styles',
+        dest: '.tmp/styles/',
+        src: '{,*/}*.css'
       }
-      // ,
-      // stylesngar: {
-      //   expand: true,
-      //   cwd: '<%= yeoman.ngar %>/ui',
-      //   dest: '.tmp/styles/',
-      //   src: '{,*/}*.css'
-      // }
     },
 
     // Run some tasks in parallel to speed up the build process
@@ -540,8 +529,6 @@ module.exports = function (grunt) {
         'copy:styles'
       ],
       demodist: [
-        'copy:scripts',
-        'copy:styles',
         'imagemin',
         'svgmin'
       ]
@@ -587,17 +574,17 @@ module.exports = function (grunt) {
     'wiredep',
     'useminPrepare',
     'concurrent:demodist',
-    'postcss:demodist',
-    'ngtemplates',
+    // 'postcss:demodist',
+    // 'ngtemplates',
     'concat:generated',
     'ngAnnotate:demodist',
-    'copy:demodist',
     'cdnify',
     'cssmin:generated',
     'uglify:generated',
-    'filerev:demodist',
+    'copy:demodist',
+    // 'filerev:demodist',
     'usemin',
-    'htmlmin:demodist'
+    // 'htmlmin:demodist'
   ]);
 
   grunt.registerTask('ngarbuild', [
@@ -606,10 +593,10 @@ module.exports = function (grunt) {
     'copy:ngardist',
     'ngAnnotate:ngardist',
     'concat:ngardist',
-    'cssmin',
-    'uglify',
-    'postcss',
-    'filerev'
+    'cssmin:ngardist',
+    'uglify:ngardist',
+    // 'postcss',
+    // 'filerev'
   ]);
 
   grunt.registerTask('default', [

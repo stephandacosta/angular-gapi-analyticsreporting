@@ -8,9 +8,8 @@
  * modules and components in angular-gapi-reporting-UI to select view ID
  */
 
-var ngarUI = angular.module('angularGapiAnalyticsreportingUI',[]);
-
-ngarUI.factory('ngarViewSelectorService', function (ngarManagementService, $mdPanel, $mdMedia) {
+angular.module('angularGapiAnalyticsreportingUI')
+  .factory('ngarViewSelectorService', function (ngarManagementService, $mdPanel, $mdMedia) {
 
     var panelPosition;
     if ($mdMedia('gt-sm')){
