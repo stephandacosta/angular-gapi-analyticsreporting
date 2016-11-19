@@ -497,7 +497,7 @@ module.exports = function (grunt) {
           dest: '.ngartmp',
           src: [
             '*.js',
-            'test/*.js',
+            // 'test/*.js',
             'services/*.js',
             'ui/{,*/}*.js',
             'ui/{,*/}*.css'

@@ -8,11 +8,7 @@
  * Factory in angular-gapi-reporting to load management API ressources
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarManagementService', function (appConstants) {
-
-    var defaultAccountsTree = appConstants.accountsTree;
-    var defaultMetadata = appConstants.metadata;
-    var defaultSegments = appConstants.segments;
+  .factory('ngarManagementService', function () {
 
     var status = {
       accountsTreeLoaded: false,
@@ -21,9 +17,9 @@ angular.module('angularGapiAnalyticsreporting')
     };
 
     var items = {
-      accountsTree : defaultAccountsTree,
-      segments : defaultSegments,
-      metadata : defaultMetadata,
+      accountsTree : [],
+      segments : [],
+      metadata : [],
       selectedViewId: '',
       breadcrumbs: {}
     };

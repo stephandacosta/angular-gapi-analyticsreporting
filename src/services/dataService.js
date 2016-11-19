@@ -8,7 +8,7 @@
  * Factory in angular-gapi-reporting to parse Google Analytics reporting API responses
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarDataService', function (appConstants, ngarManagementService) {
+  .factory('ngarDataService', function (ngarManagementService) {
 
     var parsedData = {
       data: [],
@@ -19,7 +19,12 @@ angular.module('angularGapiAnalyticsreporting')
 
 
     var parseData = function(inputdata){
-      var data = inputdata || appConstants.rawData;
+      if (_.undefined(inputdata)){
+        // check if any reference to parsedData is kept
+        parsedData = {};
+        return parseData;
+      }
+      var data = inputdata || {};
       var dimensionHeaders = data.reports[0].columnHeader.dimensions;
       var metricHeaders = data.reports[0].columnHeader.metricHeader.metricHeaderEntries;
       var rows = data.reports[0].data.rows;
