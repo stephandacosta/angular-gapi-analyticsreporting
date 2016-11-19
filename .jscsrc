@@ -2,5 +2,6 @@
   "requireCamelCaseOrUpperCaseIdentifiers": { "allExcept": ["client_id"]},
   "requireCapitalizedConstructors": true,
   "requireParenthesesAroundIIFE": true,
-  "validateQuoteMarks": "'"
+  "validateQuoteMarks": "'",
+  "excludeFiles": ["Grunfile.js"]
 }

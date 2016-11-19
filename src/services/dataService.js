@@ -19,7 +19,7 @@ angular.module('angularGapiAnalyticsreporting')
 
 
     var parseData = function(inputdata){
-      if (_.undefined(inputdata)){
+      if (_.isUndefined(inputdata)){
         // check if any reference to parsedData is kept
         parsedData = {};
         return parseData;
