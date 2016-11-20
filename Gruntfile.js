@@ -466,8 +466,8 @@ module.exports = function (grunt) {
         },{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.ngar %>',
-          dest: '<%= yeoman.demodist %>/src',
+          cwd: '<%= yeoman.ngardist %>',
+          dest: '<%= yeoman.demodist %>/ngardist',
           src: [
             '**/*.js',
             '**/*.css',
@@ -550,6 +550,7 @@ module.exports = function (grunt) {
     }
 
     grunt.task.run([
+      'ngarbuild',
       'clean:server',
       'wiredep',
       'concurrent:server',
@@ -570,6 +571,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('demobuild', [
+    'ngarbuild',
     'clean:demodist',
     'wiredep',
     'useminPrepare',
