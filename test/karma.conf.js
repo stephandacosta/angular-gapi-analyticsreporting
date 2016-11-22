@@ -21,14 +21,16 @@ module.exports = function(config) {
     files: [
       // bower:js
       'bower_components/angular/angular.js',
-      'bower_components/lodash/lodash.js',
-      'bower_components/moment/moment.js',
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-aria/angular-aria.js',
       'bower_components/angular-messages/angular-messages.js',
       'bower_components/angular-material/angular-material.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/lodash/lodash.js',
+      'bower_components/moment/moment.js',
+      'bower_components/angular-gapi-analyticsreporting/dist/ngar.js',
+      'bower_components/angular-gapi-analyticsreporting-material-ui/dist/ngarMaterialUi.js',
       // endbower
       'demo/scripts/**/*.js',
       'src/**/*.js',

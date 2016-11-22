@@ -1,0 +1,30 @@
+{
+  "name": "angular-gapi-analyticsreporting",
+  "description": "angular services for reporting api",
+  "main": "dist/ngar.js",
+  "keywords": [
+    "google",
+    "api",
+    "analytics",
+    "reporting",
+    "angular"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src"
+  ],
+  "dependencies": {
+    "angular": "^1.4.0",
+    "lodash": "^4.16.6",
+    "moment": "^2.16.0"
+  },
+  "devDependencies": {
+  },
+  "moduleName": "angularGapiAnalyticsreporting"
+}
