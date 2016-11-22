@@ -176,22 +176,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // htmlConvert used for creating the UI templates in javascript
-    // htmlConvert: {
-    //   options: {
-    //     rename: function (moduleName) {
-    //       return '/' + moduleName.replace('.html', '');
-    //     },
-    //     quoteChar: '\'',
-    //
-    //     // custom options, see below
-    //   },
-    //   mytemplate: {
-    //     src: ['src/ui/**/*.html'],
-    //     dest: 'src/ui/templatesJs/templates.js'
-    //   },
-    // },
-
     // Empties folders to start fresh
     clean: {
       demo: {
@@ -253,14 +237,6 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.demodist %>/styles/'
         }]
       }
-      // ngar: {
-      //   files: [{
-      //     expand: true,
-      //     cwd: '.ngartmp/styles/',
-      //     src: '{,*/}*.css',
-      //     dest: '.ngartmp/styles/'
-      //   }]
-      // }
     },
 
     // Automatically inject Bower components into the demo
@@ -421,36 +397,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-
-    // htmlmin: {
-    //   demo: {
-    //     options: {
-    //       collapseWhitespace: true,
-    //       conservativeCollapse: true,
-    //       collapseBooleanAttributes: true,
-    //       removeCommentsFromCDATA: true
-    //     },
-    //     files: [{
-    //       expand: true,
-    //       cwd: '<%= yeoman.demodist %>',
-    //       src: ['*.html'],
-    //       dest: '<%= yeoman.demodist %>'
-    //     }]
-    //   }
-    // },
-
-    // ngtemplates: {
-    //   demo: {
-    //     options: {
-    //       module: 'angularGapiAnalyticsreportingDemoApp',
-    //       htmlmin: '<%= htmlmin.demodist.options %>',
-    //       usemin: 'scripts/scripts.js'
-    //     },
-    //     cwd: '<%= yeoman.demo %>',
-    //     src: 'views/{,*/}*.html',
-    //     dest: '.tmp/templateCache.js'
-    //   }
-    // },
 
     ngAnnotate: {
       ngar: {
