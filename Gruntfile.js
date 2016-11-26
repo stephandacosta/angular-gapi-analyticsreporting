@@ -533,7 +533,7 @@ module.exports = function (grunt) {
 
     'gh-pages': {
       options: {
-        message: 'Auto-generated commit'
+
       },
       'demo': {
         options: {
@@ -548,7 +548,8 @@ module.exports = function (grunt) {
           base: 'ngar',
           branch: 'master',
           tag: require('./ngar/bower.json').version,
-          repo: 'https://github.com/stephandacosta/ngar.git'
+          message: 'version: '+ require('./ngar/bower.json').version,
+          repo: 'https://github.com/stephandacosta/bower-angular-gapi-analyticsreporting.git'
         },
         src: '**/*.*'
       },
@@ -557,7 +558,8 @@ module.exports = function (grunt) {
           base: 'ngar-material-ui',
           branch: 'master',
           tag: require('./ngar-material-ui/bower.json').version,
-          repo: 'https://github.com/stephandacosta/ngar-material-ui.git'
+          message: 'version: '+ require('./ngar-material-ui/bower.json').version,
+          repo: 'https://github.com/stephandacosta/bower-angular-gapi-analyticsreporting-material-ui.git'
         },
         src: '**/*.*'
       }
@@ -571,6 +573,19 @@ module.exports = function (grunt) {
       }
     }
   });
+
+
+  // grunt tasks:
+  // default: test and build everything
+  // serve to serve locally without building
+  // serve:docs to build demo and serve locally
+  // test to run testing (in progress)
+  // release:bower to push bower components to master branch with version tag
+  // build:demo to build demo to docs folder
+  // build:ngar to build ngar core services for the bower package
+  // build: ngarMatUi to build ngar angular material directives for the bower package
+  // build:dist to build ngar and ngarmatui in dist folder
+  // build to build all the above
 
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -598,7 +613,8 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('push', 'building', function (target) {
+
+  grunt.registerTask('release', 'releasing bower versions', function (target) {
     if (target === 'bower') {
       return grunt.task.run([
         'build:ngar',
@@ -607,12 +623,12 @@ module.exports = function (grunt) {
         'gh-pages:ngarMatUi'
       ]);
     }
-    if (target === 'demo') {
-      return grunt.task.run([
-        'build:demo',
-        'gh-pages:demo'
-      ]);
-    }
+    // if (target === 'demo') {
+    //   return grunt.task.run([
+    //     'build:demo',
+    //     'gh-pages:demo'
+    //   ]);
+    // }
     return;
   });
 
@@ -668,9 +684,6 @@ module.exports = function (grunt) {
       'build:demo'
     ]);
   });
-
-
-
 
 
   grunt.registerTask('default', [
