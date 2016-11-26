@@ -1,0 +1,293 @@
+<md-content flex layout-margin>
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          Macros
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+      <div>
+        <md-button ng-click="initAtOnce()" class="md-primary md-raised md-hue-2">
+          Init
+        </md-button>
+        <md-icon ng-if="authStatus.signedIn" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!authStatus.signedIn" style="color:red;">not_interested</md-icon>
+      </div>
+      <div>
+        <md-button ng-click="makeAtOnce()" class="md-primary md-raised md-hue-2">
+          Get
+        </md-button>
+        <md-icon ng-if="dataParsed" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!dataParsed" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="dataParsed" ng-click="showDialog($event, 'dgDataParsed')">
+          Show Parsed Data
+        </md-button>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+      <h2>
+        1) Load Google APIs
+      </h2>
+    </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button class="md-raised md-primary md-hue-2" ng-click="load()">
+          Load APIs
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div >
+        Google API
+        <md-icon ng-if="loadStatus.gapiLoaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!loadStatus.gapiLoaded" style="color:red;">not_interested</md-icon>
+      </div>
+      <div>
+        Auth2 API
+        <md-icon ng-if="loadStatus.auth2Loaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!loadStatus.auth2Loaded" style="color:red;">not_interested</md-icon>
+      </div>
+      <div >
+        Google Analytics Reporting V3
+        <md-icon ng-if="loadStatus.analyticsV3Loaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!loadStatus.analyticsV3Loaded" style="color:red;">not_interested</md-icon>
+      </div>
+      <div >
+        Google Analytics Reporting V4
+        <md-icon ng-if="loadStatus.analyticsV4Loaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!loadStatus.analyticsV4Loaded" style="color:red;">not_interested</md-icon>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          2) Authenticate
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button class="md-raised md-primary md-hue-2" ng-click="initAuth()">
+          Initiate Auth
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div >
+        Auth Initilization
+        <md-icon ng-if="authStatus.authInitialized" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!authStatus.authInitialized" style="color:red;">not_interested</md-icon>
+      </div>
+      <md-button class="md-raised md-primary md-hue-2" ng-click="signIn()">
+        Sign-In
+      </md-button>
+      <md-button class="md-raised md-primary md-hue-2" ng-click="signOut()">
+        Sign-Out
+      </md-button>
+      <div >
+        Signed In
+        <md-icon ng-if="authStatus.signedIn" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!authStatus.signedIn" style="color:red;">not_interested</md-icon>
+        Google Account: <span ng-bind="authStatus.user"></span>
+      </div>
+
+    </md-card-content>
+  </md-card>
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          3) Get Management API Information
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button class="md-raised md-primary md-hue-2" ng-click="initManagementService()">
+          Get Management Data
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div >
+        Accounts, Properties, Views
+        <md-icon ng-if="managementStatus.accountsTreeLoaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!managementStatus.accountsTreeLoaded" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgAccountTree')">
+          Show Tree
+        </md-button>
+      </div>
+      <div >
+        Segments
+        <md-icon ng-if="managementStatus.segmentsLoaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!managementStatus.segmentsLoaded" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgSegments')">
+          Show Segments
+        </md-button>
+      </div>
+      <div >
+        MetaData
+        <md-icon ng-if="managementStatus.metadataLoaded" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!managementStatus.metadataLoaded" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="managementStatus.accountsTreeLoaded" ng-click="showDialog($event, 'dgMetadata')">
+          Show Metadata
+        </md-button>
+
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          4) Build Requests (UI elements)
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+      <h2>
+        View Selector
+      </h2>
+      <md-button ngar-view-selector class="md-primary md-raised md-hue-2">
+        Select View
+      </md-button>
+      <div>
+        <p><strong>Account:</strong>{{breadcrumbs.account}}</p>
+        <p><strong>Property:</strong>{{breadcrumbs.property}}</p>
+        <p><strong>View:</strong>{{breadcrumbs.view}}</p>
+      </div>
+
+      <md-divider></md-divider>
+
+      <h2>
+        Date Picker
+      </h2>
+      <ngar-date-selector></ngar-date-selector>
+
+      <md-divider></md-divider>
+
+      <h2>
+        Dimension Picker
+      </h2>
+      <ngar-measurement-selector type="DIMENSION"></ngar-measurement-selector>
+
+      <md-divider></md-divider>
+
+      <h2>
+        Metric Picker
+      </h2>
+      <ngar-measurement-selector type="METRIC"></ngar-measurement-selector>
+
+      <md-divider></md-divider>
+
+      <h2>
+        Segment Picker
+      </h2>
+      <ngar-measurement-selector type="SEGMENT"></ngar-measurement-selector>
+    </md-card-content>
+  </md-card>
+
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          5) Build Request
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button ng-click="buildRequest()" class="md-primary md-raised md-hue-2">
+          Build Request
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div>
+        <md-icon ng-if="requestBuilt" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!requestBuilt" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="requestBuilt" ng-click="showDialog($event, 'dgRequest')">
+          Show Request
+        </md-button>
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          6) Get Data
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button ng-click="getData()" class="md-primary md-raised md-hue-2">
+          Get Data
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div>
+        <md-icon ng-if="dataPulled" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!dataPulled" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="dataPulled" ng-click="showDialog($event, 'dgDataRaw')">
+          Show Raw Data
+        </md-button>
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <h2>
+          7) Parse Data
+        </h2>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-title>
+      <md-card-actions>
+        <md-button ng-click="parseData()" class="md-primary md-raised md-hue-2">
+          Parse Data
+        </md-button>
+      </md-card-actions>
+    </md-card-title>
+    <md-card-content>
+      <div>
+        <md-icon ng-if="dataParsed" style="color:green;">check_circle</md-icon>
+        <md-icon ng-if="!dataParsed" style="color:red;">not_interested</md-icon>
+        <md-button class="md-raised" ng-if="dataParsed" ng-click="showDialog($event, 'dgDataParsed')">
+          Show Parsed Data
+        </md-button>
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+
+
+
+
+</md-content>

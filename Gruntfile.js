@@ -21,8 +21,9 @@ module.exports = function (grunt) {
 
   // Configurable paths for the application
   var yoConfig = {
+    dist: 'dist',
     demo: 'demo',
-    demodist: 'demodist',
+    demodist: 'docs',
     ngar: 'ngar/src',
     ngardist: 'ngar/dist',
     ngarMatUi: 'ngar-material-ui/src',
@@ -47,7 +48,7 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.demo %>/scripts/{,*/}*.js','<%= yeoman.ngar %>/{,**/}*.js'],
+        files: ['<%= yeoman.demo %>/scripts/{,*/}*.js','<%= yeoman.ngar %>/**/*.js','<%= yeoman.ngarMatUi %>/**/*.js'],
         tasks: ['newer:jshint:all', 'newer:jscs:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -95,12 +96,12 @@ module.exports = function (grunt) {
                 connect.static('./bower_components')
               ),
               connect().use(
-                '/src',
-                connect.static('./src')
+                '/ngar',
+                connect.static('./ngar')
               ),
               connect().use(
-                '/ngardist',
-                connect.static('./ngardist')
+                '/ngar-material-ui',
+                connect.static('./ngar-material-ui')
               ),
               connect().use(
                 '/demo/styles',
@@ -127,7 +128,7 @@ module.exports = function (grunt) {
           }
         }
       },
-      demodist: {
+      docs: {
         options: {
           open: true,
           base: '<%= yeoman.demodist %>'
@@ -178,12 +179,22 @@ module.exports = function (grunt) {
 
     // Empties folders to start fresh
     clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '<%= yeoman.dist %>',
+            '!<%= yeoman.dist %>/.git{,*/}*'
+          ]
+        }]
+      },
       demo: {
         files: [{
           dot: true,
           src: [
             '.tmp',
-            '<%= yeoman.demodist %>/{,*/}*',
+            '<%= yeoman.demodist %>',
             '!<%= yeoman.demodist %>/.git{,*/}*'
           ]
         }]
@@ -193,7 +204,7 @@ module.exports = function (grunt) {
           dot: true,
           src: [
             '.ngartmp',
-            '<%= yeoman.ngardist %>/{,*/}*',
+            '<%= yeoman.ngardist %>/**',
             '!<%= yeoman.ngardist %>/.git{,*/}*'
           ]
         }]
@@ -203,7 +214,7 @@ module.exports = function (grunt) {
           dot: true,
           src: [
             '.ngarMatUitmp',
-            '<%= yeoman.ngarMatUidist %>/{,*/}*',
+            '<%= yeoman.ngarMatUidist %>/**',
             '!<%= yeoman.ngarMatUidist %>/.git{,*/}*'
           ]
         }]
@@ -337,6 +348,10 @@ module.exports = function (grunt) {
     },
 
     concat_css: {
+      dist: {
+        src: ['<%= yeoman.ngarMatUidist %>/**/*.css'],
+        dest: '<%= yeoman.dist %>/ngar.all.css'
+      },
       ngarMatUi: {
         src: ['<%= yeoman.ngarMatUi %>/**/*.css'],
         dest: '<%= yeoman.ngarMatUidist %>/ngarMaterialUi.css'
@@ -366,6 +381,10 @@ module.exports = function (grunt) {
     },
 
     concat: {
+      dist: {
+        src: ['<%= yeoman.ngardist %>/ngar.js','<%= yeoman.ngarMatUidist %>/ngarMaterialUi.js'], // need to concate in this order
+        dest: '<%= yeoman.dist %>/ngar.all.js'
+      },
       ngar: {
         src: ['.ngartmp/ngarModule.js','.ngartmp/**/*.js'], // need to concate in this order
         dest: '<%= yeoman.ngardist %>/ngar.js'
@@ -399,6 +418,14 @@ module.exports = function (grunt) {
     },
 
     ngAnnotate: {
+      docs: {
+        files: [{
+          expand: true,
+          cwd: '.tmp',
+          src: '**/*.js',
+          dest: '.tmp'
+        }]
+      },
       ngar: {
         files: [{
           expand: true,
@@ -504,6 +531,38 @@ module.exports = function (grunt) {
       ]
     },
 
+    'gh-pages': {
+      options: {
+        message: 'Auto-generated commit'
+      },
+      'demo': {
+        options: {
+          base: 'demodist',
+          branch: 'master'
+        },
+       // These files will get pushed to the `gh-pages` branch (the default).
+        src: ['index.html']
+      },
+      'ngar': {
+        options: {
+          base: 'ngar',
+          branch: 'master',
+          tag: require('./ngar/bower.json').version,
+          repo: 'https://github.com/stephandacosta/ngar.git'
+        },
+        src: '**/*.*'
+      },
+      'ngarMatUi': {
+        options: {
+          base: 'ngar-material-ui',
+          branch: 'master',
+          tag: require('./ngar-material-ui/bower.json').version,
+          repo: 'https://github.com/stephandacosta/ngar-material-ui.git'
+        },
+        src: '**/*.*'
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -515,13 +574,11 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
-    if (target === 'demo') {
-      return grunt.task.run(['build:demo', 'connect:demodist:keepalive']);
+    if (target === 'docs') {
+      return grunt.task.run(['build:demo', 'connect:docs:keepalive']);
     }
 
     grunt.task.run([
-      'build:ngar',
-      'build:ngarMatUi',
       'clean:server',
       'wiredep',
       'concurrent:server',
@@ -541,16 +598,35 @@ module.exports = function (grunt) {
     'karma'
   ]);
 
-  grunt.registerTask('build', 'building', function (target) {
-    if (target === 'demo') {
+  grunt.registerTask('push', 'building', function (target) {
+    if (target === 'bower') {
       return grunt.task.run([
         'build:ngar',
         'build:ngarMatUi',
+        'gh-pages:ngar',
+        'gh-pages:ngarMatUi'
+      ]);
+    }
+    if (target === 'demo') {
+      return grunt.task.run([
+        'build:demo',
+        'gh-pages:demo'
+      ]);
+    }
+    return;
+  });
+
+  grunt.registerTask('build', 'building', function (target) {
+    if (target === 'demo') {
+      // build demodist folder
+      return grunt.task.run([
+        'clean:demo',
         'wiredep',
         'useminPrepare', // usemin all the build files (bower components)
         'concurrent:demo', //copy demo styles into tmp
         'postcss:demo', // add prefixes in tmp
         'concat:generated', // concat the build files
+        'ngAnnotate:docs',
         'cdnify',
         'cssmin:generated',
         'uglify:generated',
@@ -578,9 +654,22 @@ module.exports = function (grunt) {
         'uglify:ngarMatUi' // uglify the concatenated js file and create new min.js file
       ]);
     }
-    // can we run all the build again here ?
-    return;
+    if (target === 'dist') {
+      return grunt.task.run([
+        'clean:dist',
+        'concat:dist',  // concatenate modules' js to dist
+        'concat_css:dist' // copy modules' css to dist
+      ]);
+    }
+    return grunt.task.run([
+      'build:ngar',
+      'build:ngarMatUi',
+      'build:dist',
+      'build:demo'
+    ]);
   });
+
+
 
 
 

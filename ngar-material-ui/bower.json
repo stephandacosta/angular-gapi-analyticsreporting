@@ -1,6 +1,7 @@
 {
   "name": "angular-gapi-analyticsreporting-material-ui",
-  "description": "angular services for reporting api",
+  "version": "0.0.0",
+  "description": "angular material directives for reporting api",
   "main": ["dist/ngarMaterialUi.js","dist/ngarMaterialUi.css"],
   "keywords": [
     "google",

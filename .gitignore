@@ -1,9 +1,7 @@
 /node_modules
-/dist
-/demodist
-/ngardist
 /.tmp
 /.ngartmp
 /.ngarMatUitmp
 /.sass-cache
 /bower_components
+/.grunt

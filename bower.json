@@ -1,9 +1,9 @@
 {
   "name": "angular-gapi-analyticsreporting-demo",
   "version": "0.0.0",
-  "description": "demo for angular service for reporting api",
+  "description": "angular components for reporting api",
   "license": "MIT",
-  "main": "demo/scripts/controllers/main.js",
+  "main": ["dist/ngar.all.js","dist/ngar.all.css"],
   "keywords": [
     "google",
     "api",
@@ -23,14 +23,15 @@
     ".tmp",
     ".sass-cache"
   ],
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "angular": "^1.4.0",
     "angular-material": "^1.1.1",
+    "lodash": "^4.16.6",
+    "moment": "^2.16.0"
+  },
+  "devDependencies": {
     "angular-ui-router": "^0.3.2",
-    "angular-mocks": "^1.4.0",
-    "angular-gapi-analyticsreporting": "./ngar",
-    "angular-gapi-analyticsreporting-material-ui": "./ngar-material-ui"
+    "angular-mocks": "^1.4.0"
   },
   "moduleName": "angularGapiAnalyticsreportingDemoApp"
 }

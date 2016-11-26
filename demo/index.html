@@ -10,11 +10,15 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="bower_components/angular-gapi-analyticsreporting-material-ui/dist/ngarMaterialUi.css" />
     <!-- endbower -->
     <!-- endbuild -->
+
+    <!-- build:css(.) styles/ngar-material-ui.css -->
+    <link rel="stylesheet" href="ngar-material-ui/src/viewSelector/viewSelector.css">
+    <!-- endbuild -->
+
     <link rel="stylesheet" href="styles/main.css">
-    <!-- <link rel="stylesheet" href="src/ui/viewSelector/viewSelector.css"> -->
+
   </head>
   <body ng-app="angularGapiAnalyticsreportingDemoApp" layout="column">
     <!--[if lte IE 8]>
@@ -49,16 +53,31 @@
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/angular-gapi-analyticsreporting/dist/ngar.js"></script>
-    <script src="bower_components/angular-gapi-analyticsreporting-material-ui/dist/ngarMaterialUi.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
+    <!-- build:js(.) scripts/ngar.js -->
+    <script src="ngar/src/ngarModule.js"></script>
+    <script src="ngar/src/loadService.js"></script>
+    <script src="ngar/src/authService.js"></script>
+    <script src="ngar/src/managementService.js"></script>
+    <script src="ngar/src/reportService.js"></script>
+    <script src="ngar/src/dataService.js"></script>
+    <script src="ngar/defaults/defaults.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/ngar-material-ui.js -->
+    <script src="ngar-material-ui/src/ngarMaterialUiModule.js"></script>
+    <script src="ngar-material-ui/src/viewSelector/viewSelector.js"></script>
+    <script src="ngar-material-ui/src/measurementSelector/measurementSelector.js"></script>
+    <script src="ngar-material-ui/src/dateSelector/dateSelector.js"></script>
+    <!-- endbuild -->
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
 
 </body>
 </html>
