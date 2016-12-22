@@ -164,7 +164,9 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     });
 
     $scope.initAtOnce = function(){
-      ngar.init();
+      ngar.init().then(function(){
+        console.log('ngar initialized');
+      });
     };
 
     $scope.makeAtOnce = function(){

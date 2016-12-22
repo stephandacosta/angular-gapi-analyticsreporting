@@ -21,7 +21,7 @@ ngar.factory('ngar', function(ngarLoadService, ngarAuthService, ngarManagementSe
   console.log('ngar factory is running');
   return {
     init:function(){
-      ngarLoadService.loadAllApis()
+      return ngarLoadService.loadAllApis()
       .then(ngarAuthService.initAuth)
       .then(ngarManagementService.init)
       .catch(function(error){
