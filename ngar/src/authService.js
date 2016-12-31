@@ -8,12 +8,7 @@
  * Factory in angular-gapi-reporting for authentifications
  */
 angular.module('angularGapiAnalyticsreporting')
-  .factory('ngarAuthService', function ($rootScope) {
-
-
-
-  // Replace with your client ID from the developer console.
-  var CLIENT_ID = '1044610610585-5nopo43t8ekv9vvdfbi5p43fv4295uqr.apps.googleusercontent.com';
+  .factory('ngarAuthService', function ($rootScope, CLIENT_ID) {
 
   // Set authorized scope.
   var SCOPES = 'https://www.googleapis.com/auth/analytics.readonly';
