@@ -33,12 +33,11 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.signIn = function(){
       console.log('signing in');
-      ngarAuthService.signIn().then(function(whatisthat){
-        console.log('signed in', whatisthat);
-        // console.log('signed in status in service', ngarAuthService.status);
+      ngarAuthService.signIn().then(function(status){
+        console.log('signed in', status);
         $scope.$digest();
       }, function(error){
-        console.log('errror initilizing signing in', error);
+        console.log('error initilizing signing in', error);
       });
     };
 
@@ -170,6 +169,26 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
         console.log('ngar initialized', tree);
         // $scope.$digest();
 
+      });
+    };
+
+    $scope.ngarSignIn = function(){
+      console.log('signing in');
+      ngar.signIn().then(function(status){
+        console.log('signed in', status);
+        $scope.$digest();
+      }, function(error){
+        console.log('error initilizing signing in', error);
+      });
+    };
+
+    $scope.ngarSignOut = function(){
+      console.log('signing out');
+      ngar.signOut().then(function(){
+        console.log('signed out');
+        $scope.$digest();
+      }, function(error){
+        console.log('errror initilizing signing out', error);
       });
     };
 

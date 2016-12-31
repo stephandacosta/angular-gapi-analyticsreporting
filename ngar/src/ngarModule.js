@@ -37,17 +37,12 @@ ngar.factory('ngar', function(ngarLoadService, ngarAuthService, ngarManagementSe
 
     signIn:function(){
       return ngarAuthService.signIn()
-      .then(ngarManagementService.init)
-      .catch(function(error){
-        console.log(error);
-      });
+      .then(ngarManagementService.init);
     },
     signOut:function(){
-      return ngarAuthService.signOut()
-      .catch(function(error){
-        console.log(error);
-      });
+      return ngarAuthService.signOut();
     },
+
     get: function(params){
       var requestJson = ngarReportService.buildRequest(params);
       return ngarReportService.getData(window.gapi, requestJson)
