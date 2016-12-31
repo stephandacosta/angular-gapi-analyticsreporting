@@ -31,26 +31,6 @@ angular.module('angularGapiAnalyticsreporting')
   };
 
 
-  // Function to initialize authentfication
-  // assumes gapi object is loaded and available in the global namespace
-  var initAuth = function() {
-    return window.gapi.auth2.init({
-        client_id: CLIENT_ID,
-        scope: SCOPES
-    }).then(function (response) {
-      auth2 = window.gapi.auth2.getAuthInstance();
-      status.authInitialized = true;
-      // update signed in status
-      updateSigninStatus(auth2.isSignedIn.get());
-      // then listen for change
-      auth2.isSignedIn.listen(updateSigninStatus);
-      // auth2.currentUser.listen(listener);
-      return response;
-    }, function(error){
-      console.log('error loading initializing auth', error);
-      return error;
-    });
-  };
 
   //get google account email
   var updateUser = function(){
@@ -67,18 +47,48 @@ angular.module('angularGapiAnalyticsreporting')
   var updateSigninStatus = function(isSignedIn) {
     console.log('update in signin status');
     status.signedIn = isSignedIn;
-    updateUser();
-    $rootScope.$digest();
+    if(isSignedIn){
+      updateUser();
+      $rootScope.$broadcast('gapiAuth:signedin');
+    } else {
+      $rootScope.$broadcast('gapiAuth:signedOut');
+    }
+  };
+
+  // Function to initialize authentfication
+  // assumes gapi object is loaded and available in the global namespace
+  var initAuth = function(clientID) {
+    return window.gapi.auth2.init({
+      client_id: clientID || CLIENT_ID,
+      scope: SCOPES
+    }).then(function (gAuth) {
+      // auth2 = window.gapi.auth2.getAuthInstance();
+      auth2 = gAuth;
+      status.authInitialized = true;
+      // update signed in status
+      updateSigninStatus(auth2.isSignedIn.get());
+      // then listen for change
+      auth2.isSignedIn.listen(updateSigninStatus);
+      // unable to return anything due to implementation;
+    });
   };
 
   // function to trigger sign-in by the user returns promise
   var signIn = function() {
-    return auth2.signIn();
+    return auth2.signIn()
+      .then(function(){
+        updateSigninStatus(auth2.isSignedIn.get());
+        return status;
+      });
   };
 
   // function to trigger sign-out by the user returns promise
   var signOut = function() {
-    return auth2.signOut();
+    return auth2.signOut()
+    .then(function(){
+      updateSigninStatus(auth2.isSignedIn.get());
+      return status;
+    });
   };
 
 

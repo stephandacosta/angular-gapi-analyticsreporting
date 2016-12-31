@@ -23,8 +23,8 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.initAuth = function(){
       console.log('initializing Auth');
-      ngarAuthService.initAuth().then(function(){
-        console.log('Auth is initialized');
+      ngarAuthService.initAuth().then(function(status){
+        console.log('Auth is initialized', status);
         $scope.$digest();
       }, function(error){
         console.log('errror initilizing Auth', error);
@@ -33,13 +33,15 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.signIn = function(){
       console.log('signing in');
-      ngarAuthService.signIn().then(function(){
-        console.log('signed in');
+      ngarAuthService.signIn().then(function(whatisthat){
+        console.log('signed in', whatisthat);
+        // console.log('signed in status in service', ngarAuthService.status);
         $scope.$digest();
       }, function(error){
         console.log('errror initilizing signing in', error);
       });
     };
+
     $scope.signOut = function(){
       console.log('signing out');
       ngarAuthService.signOut().then(function(){
@@ -164,20 +166,29 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     });
 
     $scope.initAtOnce = function(){
-      ngar.init().then(function(){
-        console.log('ngar initialized');
+      ngar.init().then(function(tree){
+        console.log('ngar initialized', tree);
+        // $scope.$digest();
+
       });
     };
 
+    var getFirstViewId = function(accountsTree){
+      return accountsTree[0].properties[0].views[0].id;
+    };
+
     $scope.makeAtOnce = function(){
+      var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
       var params = {
-          viewId : '122523409',
+          viewId : viewId,
           dateStart: moment().subtract(60, 'days').toDate(),
           dateEnd: moment().subtract(1, 'days').toDate(),
           dimensions: ['ga:date','ga:sourceMedium'],
           metrics: ['ga:sessions','ga:users']
       };
-      ngar.get(params);
+      ngar.get(params).then(function(data){
+        console.log(data);
+      });
     };
 
 

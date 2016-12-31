@@ -23,20 +23,75 @@ ngar.factory('ngar', function(ngarLoadService, ngarAuthService, ngarManagementSe
     init:function(){
       return ngarLoadService.loadAllApis()
       .then(ngarAuthService.initAuth)
+      .then(function(){
+        if (ngarAuthService.status.signedIn){
+          return ngarManagementService.init();
+        } else {
+          return false;
+        }
+      })
+      .catch(function(error){
+        console.log(error);
+      });
+    },
+
+    signIn:function(){
+      return ngarAuthService.signIn()
       .then(ngarManagementService.init)
       .catch(function(error){
         console.log(error);
       });
     },
-    get: function(params){
-      ngarReportService.buildRequest(params);
-      return ngarReportService.getData(window.gapi)
-      .then(ngarDataService.parseData)
-      .then(function(data){
-        console.log(data);
-      })
+    signOut:function(){
+      return ngarAuthService.signOut()
       .catch(function(error){
         console.log(error);
+      });
+    },
+    get: function(params){
+      var requestJson = ngarReportService.buildRequest(params);
+      return ngarReportService.getData(window.gapi, requestJson)
+      .then(ngarDataService.parseData)
+      .catch(function(error){
+        console.log(error);
+      });
+    }
+  };
+});
+
+
+ngar.directive('ngarSignedIn', function (ngarAuthService) {
+  return {
+    restrict: 'A',
+    link: function (scope, elem) {
+      scope.$watch(function(){
+        return (ngarAuthService.status.signedIn && ngarAuthService.status.authInitialized);
+      }, function(signedIn){
+        if (signedIn){
+          elem.removeClass('ng-hide');
+        } else {
+          elem.addClass('ng-hide');
+        }
+        // $compile(elem)(scope);
+      });
+    }
+  };
+});
+
+
+ngar.directive('ngarSignedOut', function (ngarAuthService) {
+  return {
+    restrict: 'A',
+    link: function (scope, elem) {
+      scope.$watch(function(){
+        return (!ngarAuthService.status.signedIn && ngarAuthService.status.authInitialized);
+      }, function(signedIn){
+        if (signedIn){
+          elem.removeClass('ng-hide');
+        } else {
+          elem.addClass('ng-hide');
+        }
+        // $compile(elem)(scope);
       });
     }
   };
