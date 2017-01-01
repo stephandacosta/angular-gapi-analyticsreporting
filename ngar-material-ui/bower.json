@@ -26,7 +26,7 @@
     "lodash": "^4.16.6",
     "moment": "^2.16.0",
     "angular-material": "^1.1.1",
-    "angular-gapi-analyticsreporting": "https://github.com/stephandacosta/bower-angular-gapi-analyticsreporting.git#^0.0.0"
+    "angular-gapi-analyticsreporting": "https://github.com/stephandacosta/bower-angular-gapi-analyticsreporting.git#^0.0.1"
   },
   "devDependencies": {
   },
