@@ -28,6 +28,8 @@ demoApp.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
+demoApp.constant('CLIENT_ID', '1044610610585-5nopo43t8ekv9vvdfbi5p43fv4295uqr.apps.googleusercontent.com');
+
 // configure palette
 demoApp.config(function ($mdThemingProvider) {
   $mdThemingProvider.theme('default')
