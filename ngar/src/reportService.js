@@ -6,11 +6,17 @@
  * @description
  * # reportService
  * Factory in angular-gapi-reporting to query Google Analytics reporting API
+ * https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#response-body
+ * Requests, each request will have a separate response.
+ * There can be a maximum of 5 requests.
+ * All requests should have the same dateRanges, viewId, segments, samplingLevel, and cohortGroup.
  */
+
+
 angular.module('angularGapiAnalyticsreporting')
   .factory('ngarReportService', function ($q, ngarAuthService) {
 
-    var params = {
+    var params = [{
       viewId : '',
       dateStart: new Date(),
       dateEnd: new Date(),
@@ -18,7 +24,7 @@ angular.module('angularGapiAnalyticsreporting')
       metrics: [],
       segments: [],
       filters: []
-    };
+    }];
 
     var request = {
       json: {},
@@ -39,64 +45,64 @@ angular.module('angularGapiAnalyticsreporting')
 
     var buildRequest = function(paramsInput){
 
-      if (_.isObject(paramsInput)) {
+      // checks if there is an override otherwise takes the params captured in the service
+      if (_.isArray(paramsInput)) {
         params = paramsInput;
       }
 
 
       request.json = {
-        'reportRequests':[
-          {
-            'viewId': params.viewId,
+        'reportRequests': params.map(function(paramsItem){
+          return {
+            'viewId': paramsItem.viewId,
             'dateRanges':[
               {
-                'startDate': moment(params.dateStart).format('YYYY-MM-DD'),
-                'endDate': moment(params.dateEnd).format('YYYY-MM-DD')
+                'startDate': moment(paramsItem.dateStart).format('YYYY-MM-DD'),
+                'endDate': moment(paramsItem.dateEnd).format('YYYY-MM-DD')
               }
             ]
-          }
-        ]
+          };
+        })
       };
 
-      request.json.reportRequests[0].dimensions = params.dimensions.map(function(dimension){
-        if (_.isObject(dimension)){
-          return {'name': dimension.id};
-        }
-        if (_.isString(dimension)) {
-          return {'name': dimension};
-        }
-      });
-
-      request.json.reportRequests[0].metrics = params.metrics.map(function(metric){
-        if (_.isObject(metric)) {
-          return {'expression': metric.id};
-        }
-        if (_.isString(metric)) {
-          return {'expression': metric};
-        }
-      });
-
-      if (!_.isEmpty(params.segments)){
-        request.json.reportRequests[0].dimensions.push({'name': 'ga:segment'});
-        request.json.reportRequests[0].segments = params.segments.map(function(segment){
-          if (_.isObject(segment)) {
-            return { 'segmentId': segment.segmentId };
+      params.forEach(function(param,index){
+        request.json.reportRequests[index].dimensions = param.dimensions.map(function(dimension){
+          if (_.isObject(dimension)){
+            return {'name': dimension.id};
           }
-          if (_.isString(segment)) {
-            return { 'segmentId': segment };
+          if (_.isString(dimension)) {
+            return {'name': dimension};
           }
         });
-      }
-
-      if (!_.isEmpty(params.filters)){
-        request.json.reportRequests[0].dimensionFilterClauses = params.filters.map(function(filter){
-        return {
-            'dimensionName': filter.dimension.id,
-            'operator': filter.operator.operator,
-            'expressions': (filter.operator.operator==='IN_LIST' ? filter.expression.split(',') : filter.expression)
-          };
+        request.json.reportRequests[index].metrics = param.metrics.map(function(metric){
+          if (_.isObject(metric)) {
+            return {'expression': metric.id};
+          }
+          if (_.isString(metric)) {
+            return {'expression': metric};
+          }
         });
-      }
+        if (!_.isEmpty(param.segments)){
+          request.json.reportRequests[index].dimensions.push({'name': 'ga:segment'});
+          request.json.reportRequests[index].segments = param.segments.map(function(segment){
+            if (_.isObject(segment)) {
+              return { 'segmentId': segment.segmentId };
+            }
+            if (_.isString(segment)) {
+              return { 'segmentId': segment };
+            }
+          });
+        }
+        if (!_.isEmpty(param.filters)){
+          request.json.reportRequests[index].dimensionFilterClauses = param.filters.map(function(filter){
+          return {
+              'dimensionName': filter.dimension.id,
+              'operator': filter.operator.operator,
+              'expressions': (filter.operator.operator==='IN_LIST' ? filter.expression.split(',') : filter.expression)
+            };
+          });
+        }
+      });
 
       return request.json;
 
@@ -125,7 +131,7 @@ angular.module('angularGapiAnalyticsreporting')
 
     var updateViewId = function(id){
       console.log('updating view id', id);
-      params.viewId = id;
+      params[0].viewId = id;
     };
 
     return {

@@ -198,13 +198,19 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
 
     $scope.makeAtOnce = function(){
       var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
-      var params = {
+      var params = [{
           viewId : viewId,
           dateStart: moment().subtract(60, 'days').toDate(),
           dateEnd: moment().subtract(1, 'days').toDate(),
           dimensions: ['ga:date','ga:sourceMedium'],
           metrics: ['ga:sessions','ga:users']
-      };
+      },{
+          viewId : viewId,
+          dateStart: moment().subtract(60, 'days').toDate(),
+          dateEnd: moment().subtract(1, 'days').toDate(),
+          dimensions: ['ga:source','ga:medium'],
+          metrics: ['ga:sessions','ga:users']
+      }];
       ngar.get(params).then(function(data){
         console.log(data);
       });
