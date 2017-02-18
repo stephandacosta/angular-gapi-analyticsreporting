@@ -120,8 +120,9 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.$watch(function(){
-      return ngarReportService.params.viewId;
+      return ngarReportService.params[0].viewId;
     }, function(id){
+      console.log('breadcrumbs ',ngarManagementService.getBreadcrumbs(id));
       $scope.breadcrumbs = ngarManagementService.getBreadcrumbs(id);
     });
 
