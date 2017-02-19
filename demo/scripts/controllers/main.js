@@ -8,7 +8,7 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService, ngar) {
+  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService, ngar, $mdToast) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
@@ -207,23 +207,32 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.makeAtOnce = function(){
-      var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
-      var params = [{
+      if (ngarManagementService.status.accountsTreeLoaded){
+        var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
+        var params = [{
           viewId : viewId,
           dateStart: moment().subtract(60, 'days').toDate(),
           dateEnd: moment().subtract(1, 'days').toDate(),
           dimensions: ['ga:date','ga:sourceMedium'],
           metrics: ['ga:sessions','ga:users']
-      },{
+        },{
           viewId : viewId,
           dateStart: moment().subtract(60, 'days').toDate(),
           dateEnd: moment().subtract(1, 'days').toDate(),
           dimensions: ['ga:source','ga:medium'],
           metrics: ['ga:sessions','ga:users']
-      }];
-      ngar.get(params).then(function(data){
-        console.log(data);
-      });
+        }];
+        ngar.get(params).then(function(data){
+          console.log(data);
+        });
+      } else {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('account management data no ready yet')
+            .position('top left')
+            .hideDelay(3000)
+        );
+      }
     };
 
 
