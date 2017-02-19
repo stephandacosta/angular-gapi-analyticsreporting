@@ -12,9 +12,6 @@ angular.module('angularGapiAnalyticsreportingUI')
 
   .controller('DateSelectorCtrl', function($scope, ngarReportService){
 
-    $scope.dateStart = ngarReportService.params[0].dateStart;
-    $scope.dateEnd = ngarReportService.params[0].dateEnd;
-
     $scope.$watch('dateStart', function(newDate){
       ngarReportService.params[0].dateStart = newDate;
     });
@@ -36,7 +33,8 @@ angular.module('angularGapiAnalyticsreportingUI')
     return {
       restrict: 'E',
       scope: {
-        type:'@'
+        defaultStart:'=',
+        defaultEnd: '='
       },
       controller: 'DateSelectorCtrl',
       template:
@@ -49,6 +47,21 @@ angular.module('angularGapiAnalyticsreportingUI')
          '    <label class="md-subhead">End Date</label>\n' +
          '    <md-datepicker ng-model="dateEnd" md-hide-icons="triangle" md-is-open="endDateIsOpen"  md-open-on-focus ng-required></md-datepicker>\n' +
          '  </div>\n' +
-         '</div>\n'
+         '</div>\n',
+      link: function(scope){
+
+        scope.$watch('defaultStart', function(start){
+          if (start){
+            scope.dateStart = start;
+          }
+        });
+
+        scope.$watch('defaultEnd', function(end){
+          if (end){
+            scope.dateEnd = end;
+          }
+        });
+
+      }
     };
   });

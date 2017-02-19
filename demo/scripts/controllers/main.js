@@ -51,12 +51,21 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       });
     };
 
+    var fillDefaults = function(){
+      $scope.defaultView = ngarManagementService.items.accountsTree[0].properties[0].views[0].id;
+      $scope.defaultStart = moment().subtract(30, 'days').toDate();
+      $scope.defaultEnd = moment().subtract(1, 'days').toDate();
+      $scope.defaultDimensions = ['ga:date','ga:country'];
+      $scope.defaultMetrics = ['ga:sessions','ga:users','ga:pageviews'];
+      $scope.defaultSegments = ['All Users','New Users'];
+    };
 
 
     $scope.initManagementService = function(){
       console.log('getting management data');
       ngarManagementService.init().then(function(){
         console.log('init done');
+        fillDefaults();
         // promise returns the managmentService items
         // but one can also use the API ngarManagementService.items
         $scope.$digest();

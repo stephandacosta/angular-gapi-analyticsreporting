@@ -61,13 +61,46 @@ angular.module('angularGapiAnalyticsreportingUI')
   })
 
 
-  .directive('ngarMeasurementSelector', function () {
+  .directive('ngarMeasurementSelector', function (ngarManagementService, ngarReportService) {
     return {
       restrict: 'E',
       scope: {
-        type:'@'
+        type:'@',
+        defaultSelection: '='
       },
       controller: 'MeasurementSelectorCtrl',
+      link: function(scope){
+        var selectedMeasurements;
+        var measurementMap = {
+          'DIMENSION' : 'dimensions',
+          'METRIC': 'metrics',
+          'SEGMENT': 'segments'
+        };
+        scope.$watchCollection('defaultSelection', function(selection){
+          if (selection){
+            if (scope.type === 'DIMENSION' || scope.type === 'METRIC'){
+              selectedMeasurements = selection.map(function(selectionItem){
+                return ngarManagementService.items.metadata.find(function(metadataItem){
+                  return metadataItem.id === selectionItem;
+                });
+              });
+            }
+            if (scope.type === 'SEGMENT'){
+              selectedMeasurements = selection.map(function(selectionItem){
+                return ngarManagementService.items.segments.find(function(segmentItem){
+                  segmentItem.group = segmentItem.type;
+                  segmentItem.uiName = segmentItem.name;
+                  return segmentItem.name === selectionItem;
+                });
+              });
+            }
+            scope.selectedMeasurements = selectedMeasurements.filter(function(selected){
+              return !_.isUndefined(selected);
+            });
+            ngarReportService.params[0][measurementMap[scope.type]]=scope.selectedMeasurements;
+          }
+        });
+      },
       template:
          '<div flex layout-margin>\n' +
          '  <md-autocomplete\n' +
