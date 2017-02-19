@@ -29,6 +29,9 @@ module.exports = function(config) {
       'bower_components/moment/moment.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/SHA-1/sha1.js',
+      'bower_components/angulartics/src/angulartics.js',
+      'bower_components/angulartics-google-tag-manager/lib/angulartics-google-tag-manager.js',
       // endbower
       'demo/scripts/**/*.js',
       'src/**/*.js',

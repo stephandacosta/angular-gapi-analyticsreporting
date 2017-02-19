@@ -1,6 +1,13 @@
 <!doctype html>
 <html>
   <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-T2JK79D');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
@@ -22,30 +29,26 @@
 
   </head>
   <body ng-app="angularGapiAnalyticsreportingDemoApp" layout="column">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T2JK79D"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <md-toolbar layout="column">
       <div flex class="md-toolbar-tools" layout="row" layout-align="left center">
-          <h3><span> Angular-GAPI-AnalyticsReporting Module demo </span></h3>
+          <h3><span ui-sref="home"> Angular-GAPI-AnalyticsReporting Module demo </span></h3>
       </div>
+    </md-toolbar>
+    <md-toolbar layout="row" class="md-primary md-hue-1">
+          <md-button ui-sref="home"><md-icon>home</md-icon>Home</md-button>
+          <md-button ui-sref="privacy"><md-icon>attach_file</md-icon>Privacy</md-button>
+          <md-button href="https://github.com/stephandacosta/angular-gapi-analyticsreporting"><md-icon>code</md-icon>Source Code</md-button>
     </md-toolbar>
 
     <md-content flex layout="row" layout-fill ui-view id="mainContainer" ng-cloak></md-content>
-
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <!-- <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script> -->
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -57,6 +60,9 @@
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/SHA-1/sha1.js"></script>
+    <script src="bower_components/angulartics/src/angulartics.js"></script>
+    <script src="bower_components/angulartics-google-tag-manager/lib/angulartics-google-tag-manager.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

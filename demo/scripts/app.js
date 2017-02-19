@@ -13,7 +13,9 @@ var demoApp = angular.module('angularGapiAnalyticsreportingDemoApp',
     'ngMaterial',
     'ui.router',
     'angularGapiAnalyticsreporting',
-    'angularGapiAnalyticsreportingUI'
+    'angularGapiAnalyticsreportingUI',
+    'angulartics',
+    'angulartics.google.tagmanager'
   ]
 );
 
@@ -25,6 +27,10 @@ demoApp.config(function($stateProvider, $urlRouterProvider) {
       url: '/',
       templateUrl: 'views/main.html',
       controller: 'MainCtrl'
+    })
+    .state('privacy', {
+      url: '/privacy',
+      templateUrl: 'views/privacy.html',
     });
 });
 

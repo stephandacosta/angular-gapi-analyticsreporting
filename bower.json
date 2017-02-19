@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "angular components for reporting api",
   "license": "MIT",
-  "main": ["dist/ngar.all.js","dist/ngar.all.css"],
+  "main": [
+    "dist/ngar.all.js",
+    "dist/ngar.all.css"
+  ],
   "keywords": [
     "google",
     "api",
@@ -31,7 +34,8 @@
   },
   "devDependencies": {
     "angular-ui-router": "^0.3.2",
-    "angular-mocks": "^1.4.0"
+    "angular-mocks": "^1.4.0",
+    "angulartics-google-tag-manager": "^0.0.1"
   },
   "moduleName": "angularGapiAnalyticsreportingDemoApp"
 }
