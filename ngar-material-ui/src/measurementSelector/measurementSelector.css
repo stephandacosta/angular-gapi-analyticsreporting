@@ -1,0 +1,5 @@
+md-chips.md-default-theme md-chip, md-chips md-chip {
+    background: #009688;
+    color: white;
+    font-weight: bold;
+}
