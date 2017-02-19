@@ -160,7 +160,7 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.$watch(function(){
-      return ngarDataService.parsedData.data.length>0;
+      return ngarDataService.parsedData.reports[0].data.length>0;
     }, function(hasParsedData){
       $scope.dataParsed = hasParsedData;
     });

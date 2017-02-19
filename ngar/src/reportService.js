@@ -16,23 +16,8 @@
 angular.module('angularGapiAnalyticsreporting')
   .factory('ngarReportService', function ($q, ngarAuthService) {
 
-    var params = [{
-      viewId : '',
-      dateStart: new Date(),
-      dateEnd: new Date(),
-      dimensions: [],
-      metrics: [],
-      segments: [],
-      filters: []
-    }];
-
     var request = {
-      json: {},
-      rawData: []
-    };
-
-    var init = function(){
-      params = {
+      params: [{
         viewId : '',
         dateStart: new Date(),
         dateEnd: new Date(),
@@ -40,19 +25,33 @@ angular.module('angularGapiAnalyticsreporting')
         metrics: [],
         segments: [],
         filters: []
-      };
+      }],
+      json: {},
+      rawData: []
+    };
+
+    var init = function(){
+      request.params = [{
+        viewId : '',
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        dimensions: [],
+        metrics: [],
+        segments: [],
+        filters: []
+      }];
     };
 
     var buildRequest = function(paramsInput){
 
       // checks if there is an override otherwise takes the params captured in the service
       if (_.isArray(paramsInput)) {
-        params = paramsInput;
+        request.params = paramsInput;
       }
 
 
       request.json = {
-        'reportRequests': params.map(function(paramsItem){
+        'reportRequests': request.params.map(function(paramsItem){
           return {
             'viewId': paramsItem.viewId,
             'dateRanges':[
@@ -65,7 +64,7 @@ angular.module('angularGapiAnalyticsreporting')
         })
       };
 
-      params.forEach(function(param,index){
+      request.params.forEach(function(param,index){
         request.json.reportRequests[index].dimensions = param.dimensions.map(function(dimension){
           if (_.isObject(dimension)){
             return {'name': dimension.id};
@@ -131,14 +130,14 @@ angular.module('angularGapiAnalyticsreporting')
 
     var updateViewId = function(id){
       console.log('updating view id', id);
-      params[0].viewId = id;
+      request.params[0].viewId = id;
     };
 
     return {
       buildRequest: buildRequest,
       getData: getData,
       updateViewId: updateViewId,
-      params: params,
+      params: request.params,
       request: request
     };
 

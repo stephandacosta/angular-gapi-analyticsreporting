@@ -164,13 +164,19 @@ var signOut = function(){
 
 ```javascript
 // inject 'ngar' service
-var params = {
+var params = [{
   viewId : '123455',
   dateStart: moment().subtract(60, 'days').toDate(),
   dateEnd: moment().subtract(1, 'days').toDate(),
   dimensions: ['ga:date','ga:sourceMedium'],
   metrics: ['ga:sessions','ga:users']
-};
+},{
+  viewId : '123456',
+  dateStart: moment().subtract(30, 'days').toDate(),
+  dateEnd: moment().subtract(1, 'days').toDate(),
+  dimensions: ['ga:date','ga:country'],
+  metrics: ['ga:pageviews']
+}];
 
 var getData = function(params){
   ngar.get(params).then(function(data){
