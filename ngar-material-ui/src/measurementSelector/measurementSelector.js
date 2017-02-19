@@ -130,7 +130,8 @@ angular.module('angularGapiAnalyticsreportingUI')
          '    delete-button-label="Remove Measurement"\n' +
          '    delete-hint="Press delete to remove {{type}}"\n' +
          '    readonly="true"\n' +
-         '    md-max-chips="7">\n' +
+         '    md-max-chips="7"\n' +
+         '    ng-class="type">\n' +
          '    <md-chip-template>\n' +
          '      <span>{{$chip.uiName}}</span>\n' +
          '      <md-icon ng-click="removeMeasurement($index)">close</md-icon>\n' +
