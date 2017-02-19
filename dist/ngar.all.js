@@ -211,93 +211,119 @@ angular.module('angularGapiAnalyticsreporting')
   .factory('ngarDataService', ["ngarManagementService", function (ngarManagementService) {
 
     var parsedData = {
-      data: [],
-      dimensions: [], // array of metadata objects
-      metrics: [], // array of metadata objects
-      segments: [], //array of segments
+      reports : [{
+        data: [],
+        dimensions: [], // array of metadata objects
+        metrics: [], // array of metadata objects
+        segments: [], //array of segments
+      }]
     };
 
 
-    var parseData = function(inputdata){
-      if (_.isUndefined(inputdata)){
+    var parseData = function(rawdata){
+      console.log('inputdata',rawdata);
+      if (_.isUndefined(rawdata)){
         // check if any reference to parsedData is kept
-        parsedData = {};
-        return parseData;
+        return parsedData;
       }
-      var data = inputdata || {};
-      var dimensionHeaders = data.reports[0].columnHeader.dimensions;
-      var metricHeaders = data.reports[0].columnHeader.metricHeader.metricHeaderEntries;
-      var rows = data.reports[0].data.rows;
-      parsedData.data = rows.map(function(row){
-        var newRow = {};
-        dimensionHeaders.forEach(function(dimension, index){
-          if (dimension==='ga:date'){
-            newRow[dimension]=new Date(moment(row.dimensions[index], 'YYYYMMDD').format('YYYY-MM-DD'));
-          }
-          if (dimension==='ga:dateHour'){
-            newRow[dimension]=new Date(moment(row.dimensions[index], 'YYYYMMDDHH').format('YYYY-MM-DD HH:MM:SS'));
-          }
-          else {
-            newRow[dimension]=row.dimensions[index];
-          }
-        });
-        metricHeaders.forEach(function(metric,index){
-            newRow[metric.name]=parseInt(row.metrics[0].values[index]);
-        });
-        return newRow;
-      });
-
-      // parse dimensions in array
-      parsedData.dimensions = dimensionHeaders.map(function(dimension){
-        var items = [];
-        var metadata = {};
-        parsedData.data.forEach(function(row){
-          if (items.indexOf(row[dimension])===-1){
-            items.push(row[dimension]);
+      var dataToParse = rawdata.reports || [];
+      // loop through reports
+      parsedData.reports =  dataToParse.map(function(data){
+        var dimensionHeaders = data.columnHeader.dimensions;
+        var metricHeaders = data.columnHeader.metricHeader.metricHeaderEntries;
+        var dimensionNames = {};
+        var metricNames = {};
+        dimensionHeaders.forEach(function(dimension){
+          if (dimension === 'ga:segment'){
+            dimensionNames[dimension] = 'Segment';
+          } else {
+            dimensionNames[dimension] = ngarManagementService.items.metadata.find(function(measurement){
+              return (measurement.id === dimension);
+            }).uiName;
           }
         });
-        if (dimension === 'ga:segment'){
-          metadata = {
-            'id': 'ga:segment',
-            'dataType': 'STRING',
-            'description': 'A segment',
-            'group': 'Segment',
-            'type': 'SEGMENT',
-            'uiName': 'Segment'
-          };
-        } else {
-          metadata = ngarManagementService.items.metadata.find(function(measurement){
-            return (measurement.id === dimension);
-          });
-        }
+        metricHeaders.forEach(function(metric){
+          metricNames[metric.name] = ngarManagementService.items.metadata.find(function(measurement){
+            return (measurement.id === metric.name);
+          }).uiName;
+        });
+        var rows = data.data.rows;
         return {
-          name: metadata.uiName,
-          metadata: metadata,
-          items: items
+          data : rows.map(function(row){
+            var newRow = {};
+            dimensionHeaders.forEach(function(dimension, index){
+              if (dimension==='ga:date'){
+                newRow[dimensionNames[dimension]]=new Date(moment(row.dimensions[index], 'YYYYMMDD').format('YYYY-MM-DD'));
+              }
+              if (dimension==='ga:dateHour'){
+                newRow[dimensionNames[dimension]]=new Date(moment(row.dimensions[index], 'YYYYMMDDHH').format('YYYY-MM-DD HH:MM:SS'));
+              }
+              else {
+                newRow[dimensionNames[dimension]]=row.dimensions[index];
+              }
+            });
+            metricHeaders.forEach(function(metric,index){
+              newRow[metricNames[metric.name]]=parseInt(row.metrics[0].values[index]);
+            });
+            return newRow;
+          }),
+
+          // parse dimensions in array
+          dimensions : dimensionHeaders.map(function(dimension){
+            var items = [];
+            var metadata = {};
+            rows.forEach(function(row){
+              if (items.indexOf(row[dimension])===-1){
+                items.push(row[dimension]);
+              }
+            });
+            if (dimension === 'ga:segment'){
+              metadata = {
+                'id': 'ga:segment',
+                'dataType': 'STRING',
+                'description': 'A segment',
+                'group': 'Segment',
+                'type': 'SEGMENT',
+                'uiName': 'Segment'
+              };
+            } else {
+              metadata = ngarManagementService.items.metadata.find(function(measurement){
+                return (measurement.id === dimension);
+              });
+            }
+            return {
+              name: metadata.uiName,
+              metadata: metadata,
+              items: items
+            };
+          }),
+
+          // parse metrics in array
+          metrics : metricHeaders.map(function(metric){
+            var metadata = ngarManagementService.items.metadata.find(function(measurement){
+              return (measurement.id === metric.name);
+            });
+            return {
+              name: metadata.uiName,
+              metadata: metadata
+            };
+          }),
+
+          segments : function(){
+            var items = [];
+            rows.forEach(function(row){
+              if (items.indexOf(row['ga:segment'])===-1){
+                items.push(row['ga:segment']);
+              }
+            });
+            return items;
+          }()
+
         };
+
       });
 
-      // parse metrics in array
-      parsedData.metrics = metricHeaders.map(function(metric){
-        var metadata = ngarManagementService.items.metadata.find(function(measurement){
-          return (measurement.id === metric.name);
-        });
-        return {
-          name: metadata.uiName,
-          metadata: metadata
-        };
-      });
-
-      if (dimensionHeaders.indexOf('ga:segment')===-1){
-        parsedData.segments = [];
-      } else {
-        var segmentNames = _.find(parsedData.dimensions, {name: 'Segment'}).items;
-        parsedData.segments = _.intersectionWith(ngarManagementService.items.segments, segmentNames, function(arrVal, othVal){
-          return (arrVal.name === othVal);
-        });
-      }
-
-      return parsedData;
+      return parsedData.reports;
 
     };
 
@@ -305,12 +331,12 @@ angular.module('angularGapiAnalyticsreporting')
       parseData: parseData,
       parsedData: parsedData,
       cleanData: function(){
-        parsedData = {
+        parsedData = [{
           data: [],
           dimensions: [], // array of metadata objects
           metrics: [], // array of metadata objects
           segments: [], //array of segments
-        };
+        }];
       },
       getItemsOfDimension: function(dimension){
         return parsedData.dimensions.find(function(dimObj){
@@ -684,27 +710,18 @@ angular.module('angularGapiAnalyticsreporting')
  * @description
  * # reportService
  * Factory in angular-gapi-reporting to query Google Analytics reporting API
+ * https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#response-body
+ * Requests, each request will have a separate response.
+ * There can be a maximum of 5 requests.
+ * All requests should have the same dateRanges, viewId, segments, samplingLevel, and cohortGroup.
  */
+
+
 angular.module('angularGapiAnalyticsreporting')
   .factory('ngarReportService', ["$q", "ngarAuthService", function ($q, ngarAuthService) {
 
-    var params = {
-      viewId : '',
-      dateStart: new Date(),
-      dateEnd: new Date(),
-      dimensions: [],
-      metrics: [],
-      segments: [],
-      filters: []
-    };
-
     var request = {
-      json: {},
-      rawData: []
-    };
-
-    var init = function(){
-      params = {
+      params: [{
         viewId : '',
         dateStart: new Date(),
         dateEnd: new Date(),
@@ -712,69 +729,83 @@ angular.module('angularGapiAnalyticsreporting')
         metrics: [],
         segments: [],
         filters: []
-      };
+      }],
+      json: {},
+      rawData: []
+    };
+
+    var init = function(){
+      request.params = [{
+        viewId : '',
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        dimensions: [],
+        metrics: [],
+        segments: [],
+        filters: []
+      }];
     };
 
     var buildRequest = function(paramsInput){
 
-      if (_.isObject(paramsInput)) {
-        params = paramsInput;
+      // checks if there is an override otherwise takes the params captured in the service
+      if (_.isArray(paramsInput)) {
+        request.params = paramsInput;
       }
 
 
       request.json = {
-        'reportRequests':[
-          {
-            'viewId': params.viewId,
+        'reportRequests': request.params.map(function(paramsItem){
+          return {
+            'viewId': paramsItem.viewId,
             'dateRanges':[
               {
-                'startDate': moment(params.dateStart).format('YYYY-MM-DD'),
-                'endDate': moment(params.dateEnd).format('YYYY-MM-DD')
+                'startDate': moment(paramsItem.dateStart).format('YYYY-MM-DD'),
+                'endDate': moment(paramsItem.dateEnd).format('YYYY-MM-DD')
               }
             ]
-          }
-        ]
+          };
+        })
       };
 
-      request.json.reportRequests[0].dimensions = params.dimensions.map(function(dimension){
-        if (_.isObject(dimension)){
-          return {'name': dimension.id};
-        }
-        if (_.isString(dimension)) {
-          return {'name': dimension};
-        }
-      });
-
-      request.json.reportRequests[0].metrics = params.metrics.map(function(metric){
-        if (_.isObject(metric)) {
-          return {'expression': metric.id};
-        }
-        if (_.isString(metric)) {
-          return {'expression': metric};
-        }
-      });
-
-      if (!_.isEmpty(params.segments)){
-        request.json.reportRequests[0].dimensions.push({'name': 'ga:segment'});
-        request.json.reportRequests[0].segments = params.segments.map(function(segment){
-          if (_.isObject(segment)) {
-            return { 'segmentId': segment.segmentId };
+      request.params.forEach(function(param,index){
+        request.json.reportRequests[index].dimensions = param.dimensions.map(function(dimension){
+          if (_.isObject(dimension)){
+            return {'name': dimension.id};
           }
-          if (_.isString(segment)) {
-            return { 'segmentId': segment };
+          if (_.isString(dimension)) {
+            return {'name': dimension};
           }
         });
-      }
-
-      if (!_.isEmpty(params.filters)){
-        request.json.reportRequests[0].dimensionFilterClauses = params.filters.map(function(filter){
-        return {
-            'dimensionName': filter.dimension.id,
-            'operator': filter.operator.operator,
-            'expressions': (filter.operator.operator==='IN_LIST' ? filter.expression.split(',') : filter.expression)
-          };
+        request.json.reportRequests[index].metrics = param.metrics.map(function(metric){
+          if (_.isObject(metric)) {
+            return {'expression': metric.id};
+          }
+          if (_.isString(metric)) {
+            return {'expression': metric};
+          }
         });
-      }
+        if (!_.isEmpty(param.segments)){
+          request.json.reportRequests[index].dimensions.push({'name': 'ga:segment'});
+          request.json.reportRequests[index].segments = param.segments.map(function(segment){
+            if (_.isObject(segment)) {
+              return { 'segmentId': segment.segmentId };
+            }
+            if (_.isString(segment)) {
+              return { 'segmentId': segment };
+            }
+          });
+        }
+        if (!_.isEmpty(param.filters)){
+          request.json.reportRequests[index].dimensionFilterClauses = param.filters.map(function(filter){
+          return {
+              'dimensionName': filter.dimension.id,
+              'operator': filter.operator.operator,
+              'expressions': (filter.operator.operator==='IN_LIST' ? filter.expression.split(',') : filter.expression)
+            };
+          });
+        }
+      });
 
       return request.json;
 
@@ -803,14 +834,14 @@ angular.module('angularGapiAnalyticsreporting')
 
     var updateViewId = function(id){
       console.log('updating view id', id);
-      params.viewId = id;
+      request.params[0].viewId = id;
     };
 
     return {
       buildRequest: buildRequest,
       getData: getData,
       updateViewId: updateViewId,
-      params: params,
+      params: request.params,
       request: request
     };
 
@@ -848,14 +879,11 @@ angular.module('angularGapiAnalyticsreportingUI')
 
   .controller('DateSelectorCtrl', ["$scope", "ngarReportService", function($scope, ngarReportService){
 
-    $scope.dateStart = ngarReportService.params.dateStart;
-    $scope.dateEnd = ngarReportService.params.dateEnd;
-
     $scope.$watch('dateStart', function(newDate){
-      ngarReportService.params.dateStart = newDate;
+      ngarReportService.params[0].dateStart = newDate;
     });
     $scope.$watch('dateEnd', function(newDate){
-      ngarReportService.params.dateEnd = newDate;
+      ngarReportService.params[0].dateEnd = newDate;
     });
 
     $scope.openEndDate = function(){
@@ -872,7 +900,8 @@ angular.module('angularGapiAnalyticsreportingUI')
     return {
       restrict: 'E',
       scope: {
-        type:'@'
+        defaultStart:'=',
+        defaultEnd: '='
       },
       controller: 'DateSelectorCtrl',
       template:
@@ -885,7 +914,22 @@ angular.module('angularGapiAnalyticsreportingUI')
          '    <label class="md-subhead">End Date</label>\n' +
          '    <md-datepicker ng-model="dateEnd" md-hide-icons="triangle" md-is-open="endDateIsOpen"  md-open-on-focus ng-required></md-datepicker>\n' +
          '  </div>\n' +
-         '</div>\n'
+         '</div>\n',
+      link: function(scope){
+
+        scope.$watch('defaultStart', function(start){
+          if (start){
+            scope.dateStart = start;
+          }
+        });
+
+        scope.$watch('defaultEnd', function(end){
+          if (end){
+            scope.dateEnd = end;
+          }
+        });
+
+      }
     };
   });
 
@@ -921,7 +965,7 @@ angular.module('angularGapiAnalyticsreportingUI')
       'METRIC': 'metrics',
       'SEGMENT': 'segments'
     };
-    $scope.selectedMeasurements = ngarReportService.params[measurementMap[$scope.type]];
+    $scope.selectedMeasurements = ngarReportService.params[0][measurementMap[$scope.type]];
 
     $scope.selectMeasurement = function(measurement){
       if (measurement){
@@ -952,13 +996,46 @@ angular.module('angularGapiAnalyticsreportingUI')
   }])
 
 
-  .directive('ngarMeasurementSelector', function () {
+  .directive('ngarMeasurementSelector', ["ngarManagementService", "ngarReportService", function (ngarManagementService, ngarReportService) {
     return {
       restrict: 'E',
       scope: {
-        type:'@'
+        type:'@',
+        defaultSelection: '='
       },
       controller: 'MeasurementSelectorCtrl',
+      link: function(scope){
+        var selectedMeasurements;
+        var measurementMap = {
+          'DIMENSION' : 'dimensions',
+          'METRIC': 'metrics',
+          'SEGMENT': 'segments'
+        };
+        scope.$watchCollection('defaultSelection', function(selection){
+          if (selection){
+            if (scope.type === 'DIMENSION' || scope.type === 'METRIC'){
+              selectedMeasurements = selection.map(function(selectionItem){
+                return ngarManagementService.items.metadata.find(function(metadataItem){
+                  return metadataItem.id === selectionItem;
+                });
+              });
+            }
+            if (scope.type === 'SEGMENT'){
+              selectedMeasurements = selection.map(function(selectionItem){
+                return ngarManagementService.items.segments.find(function(segmentItem){
+                  segmentItem.group = segmentItem.type;
+                  segmentItem.uiName = segmentItem.name;
+                  return segmentItem.name === selectionItem;
+                });
+              });
+            }
+            scope.selectedMeasurements = selectedMeasurements.filter(function(selected){
+              return !_.isUndefined(selected);
+            });
+            ngarReportService.params[0][measurementMap[scope.type]]=scope.selectedMeasurements;
+          }
+        });
+      },
       template:
          '<div flex layout-margin>\n' +
          '  <md-autocomplete\n' +
@@ -988,7 +1065,8 @@ angular.module('angularGapiAnalyticsreportingUI')
          '    delete-button-label="Remove Measurement"\n' +
          '    delete-hint="Press delete to remove {{type}}"\n' +
          '    readonly="true"\n' +
-         '    md-max-chips="7">\n' +
+         '    md-max-chips="7"\n' +
+         '    ng-class="type">\n' +
          '    <md-chip-template>\n' +
          '      <span>{{$chip.uiName}}</span>\n' +
          '      <md-icon ng-click="removeMeasurement($index)">close</md-icon>\n' +
@@ -997,7 +1075,7 @@ angular.module('angularGapiAnalyticsreportingUI')
          '  <!-- <div ng-message="md-max-chips">You reached the maximum amount of chips</div> -->\n' +
          '</div>\n'
     };
-  });
+  }]);
 
 'use strict';
 
@@ -1133,13 +1211,20 @@ angular.module('angularGapiAnalyticsreportingUI')
     };
   }])
 
-  .directive('ngarViewSelector', ["ngarViewSelectorService", function (ngarViewSelectorService) {
+  .directive('ngarViewSelector', ["ngarViewSelectorService", "ngarReportService", function (ngarViewSelectorService,ngarReportService) {
     return {
       restrict: 'A',
-      scope: {},
+      scope: {
+        defaultView : '='
+      },
       link: function(scope, el){
         el.bind('click', function(){
           ngarViewSelectorService.showSelector();
+        });
+        scope.$watch('defaultView', function(viewId){
+          if (viewId){
+            ngarReportService.updateViewId(viewId);
+          }
         });
       }
     };

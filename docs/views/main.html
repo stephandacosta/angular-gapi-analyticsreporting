@@ -169,7 +169,7 @@
       <h2>
         View Selector
       </h2>
-      <md-button ngar-view-selector class="md-primary md-raised md-hue-2">
+      <md-button ngar-view-selector default-view="defaultView" class="md-primary md-raised md-hue-2">
         Select View
       </md-button>
       <div>
@@ -183,28 +183,26 @@
       <h2>
         Date Picker
       </h2>
-      <ngar-date-selector></ngar-date-selector>
+      <ngar-date-selector default-start="defaultStart" default-end="defaultEnd"></ngar-date-selector>
 
       <md-divider></md-divider>
 
       <h2>
         Dimension Picker
       </h2>
-      <ngar-measurement-selector type="DIMENSION"></ngar-measurement-selector>
+      <ngar-measurement-selector type="DIMENSION" default-selection="defaultDimensions"></ngar-measurement-selector>
 
-      <md-divider></md-divider>
 
       <h2>
         Metric Picker
       </h2>
-      <ngar-measurement-selector type="METRIC"></ngar-measurement-selector>
+      <ngar-measurement-selector type="METRIC" default-selection="defaultMetrics"></ngar-measurement-selector>
 
-      <md-divider></md-divider>
 
       <h2>
         Segment Picker
       </h2>
-      <ngar-measurement-selector type="SEGMENT"></ngar-measurement-selector>
+      <ngar-measurement-selector type="SEGMENT" default-selection="defaultSegments"></ngar-measurement-selector>
     </md-card-content>
   </md-card>
 

@@ -8,7 +8,7 @@
  * Controller of the angularGapiAnalyticsreportingDemoApp
  */
 angular.module('angularGapiAnalyticsreportingDemoApp')
-  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService, ngar) {
+  .controller('MainCtrl', function ($scope, $mdDialog, ngarLoadService, ngarAuthService, ngarManagementService, ngarReportService, ngarDataService, ngar, $mdToast) {
 
     $scope.loadStatus = ngarLoadService.status;
     $scope.authStatus = ngarAuthService.status;
@@ -51,12 +51,21 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
       });
     };
 
+    var fillDefaults = function(){
+      $scope.defaultView = ngarManagementService.items.accountsTree[0].properties[0].views[0].id;
+      $scope.defaultStart = moment().subtract(30, 'days').toDate();
+      $scope.defaultEnd = moment().subtract(1, 'days').toDate();
+      $scope.defaultDimensions = ['ga:date','ga:country'];
+      $scope.defaultMetrics = ['ga:sessions','ga:users','ga:pageviews'];
+      $scope.defaultSegments = ['All Users','New Users'];
+    };
 
 
     $scope.initManagementService = function(){
       console.log('getting management data');
       ngarManagementService.init().then(function(){
         console.log('init done');
+        fillDefaults();
         // promise returns the managmentService items
         // but one can also use the API ngarManagementService.items
         $scope.$digest();
@@ -120,8 +129,9 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.$watch(function(){
-      return ngarReportService.params.viewId;
+      return ngarReportService.params[0].viewId;
     }, function(id){
+      console.log('breadcrumbs ',ngarManagementService.getBreadcrumbs(id));
       $scope.breadcrumbs = ngarManagementService.getBreadcrumbs(id);
     });
 
@@ -159,7 +169,7 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.$watch(function(){
-      return ngarDataService.parsedData.data.length>0;
+      return ngarDataService.parsedData.reports[0].data.length>0;
     }, function(hasParsedData){
       $scope.dataParsed = hasParsedData;
     });
@@ -197,17 +207,32 @@ angular.module('angularGapiAnalyticsreportingDemoApp')
     };
 
     $scope.makeAtOnce = function(){
-      var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
-      var params = {
+      if (ngarManagementService.status.accountsTreeLoaded){
+        var viewId = getFirstViewId(ngarManagementService.items.accountsTree);
+        var params = [{
           viewId : viewId,
           dateStart: moment().subtract(60, 'days').toDate(),
           dateEnd: moment().subtract(1, 'days').toDate(),
           dimensions: ['ga:date','ga:sourceMedium'],
           metrics: ['ga:sessions','ga:users']
-      };
-      ngar.get(params).then(function(data){
-        console.log(data);
-      });
+        },{
+          viewId : viewId,
+          dateStart: moment().subtract(60, 'days').toDate(),
+          dateEnd: moment().subtract(1, 'days').toDate(),
+          dimensions: ['ga:source','ga:medium'],
+          metrics: ['ga:sessions','ga:users']
+        }];
+        ngar.get(params).then(function(data){
+          console.log(data);
+        });
+      } else {
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('account management data no ready yet')
+            .position('top left')
+            .hideDelay(3000)
+        );
+      }
     };
 
 

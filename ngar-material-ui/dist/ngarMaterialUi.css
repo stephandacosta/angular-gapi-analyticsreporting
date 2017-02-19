@@ -1,3 +1,20 @@
+md-chips.DIMENSION md-chip {
+    background: #4caf50;
+    color: white;
+    font-weight: bold;
+}
+
+md-chips.METRIC md-chip {
+    background: #2196f3;
+    color: white;
+    font-weight: bold;
+}
+
+md-chips.SEGMENT md-chip {
+    background: #e91e63;
+    color: white;
+    font-weight: bold;
+}
 .viewSelector {
   height:80%;
   width:80%;
